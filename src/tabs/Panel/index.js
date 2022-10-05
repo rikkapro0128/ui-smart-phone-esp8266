@@ -1,14 +1,59 @@
 import { memo } from 'react'
-import { Text, Image, View } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import { palate } from '~/theme/palate.js'
+import TabBar from '~/components/TabBar'
+import { Drone, PointMap, SettingLighter, DatabaseLighter, Chart } from '~/Icons'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import Config from '~/tabs/Panel/Config/index.js'
+
+const Tab = createMaterialTopTabNavigator();
+
+const iconPropCommon = {
+  width: 26,
+  height: 26,
+  fill: palate.light.textSecondary,
+}
+
+const menu = [
+  {
+    field: 'Devices',
+    name: 'Thiết bị',
+    icon: <Drone {...iconPropCommon} />,
+    btnTitle: 'Đăng ký thiết bị mới',
+  },
+  {
+    field: 'Areas',
+    name: 'Khu vực',
+    icon: <PointMap {...iconPropCommon} />,
+    btnTitle: 'Đăng ký khu vực mới',
+  },
+  {
+    field: 'Server',
+    name: 'Server',
+    icon: <DatabaseLighter {...iconPropCommon} />,
+    btnTitle: 'Đăng ký Server API',
+  },
+  {
+    field: 'Setting',
+    name: 'Setting',
+    icon: <SettingLighter {...iconPropCommon} />,
+  },
+  {
+    field: 'Charts',
+    name: 'Biểu đồ',
+    icon: <Chart {...iconPropCommon} />,
+  },
+]
 
 function Panel({ navigation }) {
   return (
     <View
       style={{
         paddingHorizontal: 40,
+        flex: 1,
       }}
     >
+      {/* Header Panel */}
       <View
         style={{
           backgroundColor: palate.light.main,
@@ -68,6 +113,13 @@ function Panel({ navigation }) {
           </View>
         </View>
       </View>
+      {/* Tabar switch Panel */}
+      <Tab.Navigator tabBar={() => null} initialRouteName="Devices">
+        {menu.map((tab) => (
+          <Tab.Screen key={tab.field} name={tab.field} initialParams={{ title: tab.name, field: tab.field, btnTitle: tab?.btnTitle || null }} component={Config} />
+        ))}
+      </Tab.Navigator>
+      <TabBar height={8} menu={menu} />
     </View>
   )
 }
