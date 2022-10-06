@@ -1,9 +1,9 @@
 export const config = {
-  apiKey: 'AIzaSyDSfBxRJO7NpvPxzSt9d9tSv8F7gbH6-Es',
-  authDomain: 'app-esp8266-auth.firebaseapp.com',
-  projectId: 'app-esp8266-auth',
-  storageBucket: 'app-esp8266-auth.appspot.com',
-  messagingSenderId: '754252304397',
-  appId: '1:754252304397:web:3ee09a88be463a63edc544',
-  measurementId: 'G-L5DVTCLD71',
+  apiKey: "AIzaSyBuRUejKkZ8ffQmn4XI_wfOuOKaFIX5VOg",
+  authDomain: "esp8266-credentials.firebaseapp.com",
+  projectId: "esp8266-credentials",
+  storageBucket: "esp8266-credentials.appspot.com",
+  messagingSenderId: "850158074973",
+  appId: "1:850158074973:web:bab741af4069438fede1b4",
+  measurementId: "G-LN4VZY2QSM"
 };

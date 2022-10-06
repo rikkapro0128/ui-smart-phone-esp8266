@@ -1,11 +1,13 @@
-import { memo, useState } from 'react';
+import { memo, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import { palate } from '~/theme/palate.js';
 import { signOut } from 'firebase/auth';
 import { Auth } from '~/auth/index.js';
 import { signOut as clearAccount } from '~/store/signSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { User, ArrowRight, SettingSlider, Database, HistoryTime, Password, Logout } from '~/Icons';
+
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const colors = [
   '#6ec8f2',
@@ -61,6 +63,11 @@ const profiles = [
 
 function Profile({ navigation }) {
   const dispatch = useDispatch();
+  const typeSignMethod = useSelector((state) => state.sign.type);
+
+  useEffect(() => {
+    console.log(typeSignMethod);
+  }, [typeSignMethod])
 
   function handleLogout(type) {
     if (type === 'signout') {
@@ -75,6 +82,10 @@ function Profile({ navigation }) {
             try {
               await signOut(Auth);
               dispatch(clearAccount());
+              if(typeSignMethod === 'google') {
+                const isSignIn = await GoogleSignin.isSignedIn();
+                if(isSignIn) { await GoogleSignin.signOut(); }
+              }
             } catch (error) {
               console.log(error);
               Alert.alert('Opp, có lỗi', 'Không thế đăng xuất tài khoản!');

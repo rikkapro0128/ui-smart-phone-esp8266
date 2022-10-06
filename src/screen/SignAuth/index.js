@@ -11,12 +11,15 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithCredential
 } from 'firebase/auth';
 import { Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { setUser } from '~/store/signSlice';
+import { setUser, setType } from '~/store/signSlice';
 
-// import * as Google from 'expo-auth-session/providers/google';
+// import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const message = {
   'c (auth/user-not-found).': 'Tài khoản này không tồn tại?',
@@ -24,17 +27,18 @@ const message = {
   'Firebase: Error (auth/wrong-password).': 'Tài khoản không hợp lệ!',
 };
 
+GoogleSignin.configure({
+  webClientId:
+    '850158074973-13467hb47t74ervfkfq879kju3de051r.apps.googleusercontent.com',
+});
+
 function SignAuth({ route, navigation }) {
   const dispatch = useDispatch();
   const { state } = route.params;
   const [stateSign, setStateSign] = useState(state);
 
-  // const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-  //   clientId:
-  //     '850158074973-i3rd6ifdcjvnaj3e09oh8kotuarupv1l.apps.googleusercontent.com',
-  // });
-
   const handlePayloadSign = useCallback(async (type, payload) => {
+    dispatch(setType('local'));
     if (type === 'signIn') {
       // auth account with payload!
       try {
@@ -77,49 +81,39 @@ function SignAuth({ route, navigation }) {
     }
   }, []);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(Auth, (user) => {
-      console.log(user);
-      if (user) {
-        dispatch(setUser(user.toJSON()));
-      }
-    });
-    return unsubscribe;
-  }, []);
-
   // useEffect(() => {
-  //   if (response?.type === 'success') {
-  //     (async function temp() {
-  //       try {
-  //         const {id_token} = response.params;
-  //         const credential = GoogleAuthProvider.credential(id_token);
-  //         const result = await signInWithCredential(Auth, credential);
-  //         console.log(result);
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     })();
-  //   }
-  // }, [response]);
-
-  // const handleSocialSign = useCallback(async type => {
-  //   console.log(request);
-  //   try {
-  //     if (type === 'google') {
-  //       // login with google popup!
-  //       if (request) {
-  //         await promptAsync();
-  //       }
+  //   const unsubscribe = onAuthStateChanged(Auth, (user) => {
+  //     console.log(user);
+  //     if (user) {
+  //       dispatch(setUser(user.toJSON()));
   //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     Alert.alert('Opps, lỗi rồi bạn à', `Đăng nhập bằng ${type} thất bại`, [
-  //       {
-  //         text: 'Hiểu rồi',
-  //       },
-  //     ]);
-  //   }
+  //   });
+  //   return unsubscribe;
   // }, []);
+
+  const handleSocialSign = useCallback(async type => {
+    try {
+      if (type === 'google') {
+        // login with google popup!
+        dispatch(setType('google'));
+        await GoogleSignin.hasPlayServices();
+        const { idToken } = await GoogleSignin.signIn();
+        const credential = GoogleAuthProvider.credential(idToken);
+        await signInWithCredential(Auth, credential);
+      }
+    } catch (error) {
+      console.log(error.message);
+      if(error.message === 'Sign in action cancelled') {
+
+      }else {
+        Alert.alert('Opps, lỗi rồi bạn à', `Đăng nhập bằng ${type} thất bại`, [
+          {
+            text: 'Hiểu rồi',
+          },
+        ]);
+      }
+    }
+  }, []);
 
   return (
     <View>
@@ -144,13 +138,13 @@ function SignAuth({ route, navigation }) {
         />
         <View style={{ marginTop: 5 }}>
           <SignSocial
-            // onPress={handleSocialSign}
+            onPress={handleSocialSign}
             socialName={'google'}
             stateSign={stateSign}
             marginBottom={20}
           />
           <SignSocial
-            // onPress={handleSocialSign}
+            onPress={handleSocialSign}
             bg={'#000'}
             socialName={'github'}
             stateSign={stateSign}

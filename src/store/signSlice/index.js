@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   user: null,
+  type: 'local'
 };
 
 export const signSlice = createSlice({
@@ -14,9 +15,12 @@ export const signSlice = createSlice({
     signOut: (state, action) => {
       state.user = null;
     },
+    setType: (state, action) => {
+      state.type = action.payload;
+    }
   },
 });
 
-export const { setUser, signOut } = signSlice.actions;
+export const { setUser, signOut, setType } = signSlice.actions;
 
 export default signSlice.reducer;

@@ -10,8 +10,6 @@ import { useState, useEffect } from 'react';
 import { Auth } from '~/auth/index.js';
 import LoadingPage from '~/components/LoadingPage';
 
-import { View, Text } from 'react-native';
-
 import { LandingPage, SignAuth, Controller } from '~/screen';
 
 const Stack = createNativeStackNavigator();
