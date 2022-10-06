@@ -77,7 +77,7 @@ function LandingPageDefault({ navigation }) {
       // Background Linear Gradient
       colors={['#9acce8', '#a1a5ec']}
       end={{ x: 0.4, y: 0.8 }}
-    >
+    >    
       <View style={styles.root}>
         {/* Block Logo */}
         <View style={styles.logo}>

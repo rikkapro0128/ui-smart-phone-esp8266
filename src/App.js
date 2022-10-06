@@ -39,7 +39,7 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = Auth.onAuthStateChanged((user) => {
-      console.log(user);
+      // console.log(user);
       if (user) {
         dispatch(setUser(user.toJSON()));
       }

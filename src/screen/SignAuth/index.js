@@ -44,7 +44,7 @@ function SignAuth({ route, navigation }) {
       try {
         await signInWithEmailAndPassword(Auth, payload.email, payload.password);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         if (error.message in message) {
           Alert.alert('Opps, Lỗi rồi', message[error.message], [
             {

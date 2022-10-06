@@ -5,7 +5,7 @@ import { signOut } from 'firebase/auth';
 import { Auth } from '~/auth/index.js';
 import { signOut as clearAccount } from '~/store/signSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { User, ArrowRight, SettingSlider, Database, HistoryTime, Password, Logout } from '~/Icons';
+import { User, ArrowRight, SettingSlider, Database, HistoryTime, Password, Logout, UserLine } from '~/Icons';
 
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
@@ -63,11 +63,8 @@ const profiles = [
 
 function Profile({ navigation }) {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.sign.user);
   const typeSignMethod = useSelector((state) => state.sign.type);
-
-  useEffect(() => {
-    console.log(typeSignMethod);
-  }, [typeSignMethod])
 
   function handleLogout(type) {
     if (type === 'signout') {
@@ -87,7 +84,7 @@ function Profile({ navigation }) {
                 if(isSignIn) { await GoogleSignin.signOut(); }
               }
             } catch (error) {
-              console.log(error);
+              // console.log(error);
               Alert.alert('Opp, có lỗi', 'Không thế đăng xuất tài khoản!');
             }
           },
@@ -152,7 +149,7 @@ function Profile({ navigation }) {
           />
           <View
             style={{
-              elevation: 5,
+              elevation: user.photoURL ? 5 : null,
               width: 80,
               height: 80,
               borderRadius: 50,
@@ -164,16 +161,29 @@ function Profile({ navigation }) {
               navigation.navigate('Profile');
             }}
           >
-            <Image
-              source={{
-                uri: 'https://i.pinimg.com/564x/7c/67/d2/7c67d210a731c81342f00ba1e3186a03.jpg',
-              }}
-              style={{
+            {
+              user.photoURL 
+              ?
+              <Image
+                source={{
+                  uri: user.photoURL,
+                }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: 50,
+                }}
+              />
+              :
+              <View style={{
                 width: '100%',
                 height: '100%',
-                borderRadius: 50,
-              }}
-            />
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <UserLine width={48} height={48} fill={palate.light.textSecondary} />
+              </View>
+            }
             <View
               style={{
                 position: 'absolute',
@@ -194,7 +204,7 @@ function Profile({ navigation }) {
               paddingVertical: 5,
             }}
           >
-            Chào, Miru nhé
+            Chào, { `${user.displayName ? user.displayName : 'đằng ấy' }` } nhé
           </Text>
           <Text
             style={{
@@ -202,7 +212,7 @@ function Profile({ navigation }) {
               fontSize: 16,
             }}
           >
-            @nickname_miru
+            { user.email }
           </Text>
         </View>
         <View
