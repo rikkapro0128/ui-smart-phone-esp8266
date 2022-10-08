@@ -9,7 +9,7 @@ function TabBar({ height = 8, menu }) {
   const navigation = useNavigation();
   const [heightFit, setHeightFit] = useState(() => Math.floor((heightScreen * height) / 100))
 
-  console.log(heightScreen)
+  // console.log(heightScreen)
 
   return (
     <View
