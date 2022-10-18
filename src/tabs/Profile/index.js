@@ -5,7 +5,7 @@ import { signOut } from 'firebase/auth';
 import { Auth } from '~/auth/index.js';
 import { signOut as clearAccount } from '~/store/signSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { User, ArrowRight, SettingSlider, Database, HistoryTime, Password, Logout, UserLine } from '~/Icons';
+import { User, ArrowRight, SettingSlider, Database, HistoryTime, Password, Logout, UserLine, IconLeft } from '~/Icons';
 
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
@@ -111,6 +111,11 @@ function Profile({ navigation }) {
             position: 'relative',
           }}
         >
+          <View style={{ position: 'absolute', left: 0, top: 0, padding: 10, marginLeft: 20, marginTop: 20 }}>
+            <TouchableOpacity activeOpacity={0.8} >
+              <IconLeft width={24} height={24} fill={palate.light.textSecondary} />
+            </TouchableOpacity>
+          </View>
           <View
             style={{
               position: 'absolute',
