@@ -111,11 +111,9 @@ function Profile({ navigation }) {
             position: 'relative',
           }}
         >
-          <View style={{ position: 'absolute', left: 0, top: 0, padding: 10, marginLeft: 20, marginTop: 20 }}>
-            <TouchableOpacity activeOpacity={0.8} >
-              <IconLeft width={24} height={24} fill={palate.light.textSecondary} />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={{ position: 'absolute', left: 0, top: 0, padding: 10, marginLeft: 20, marginTop: 20, zIndex: 999 }} onPress={() => { navigation.goBack()}} activeOpacity={0.8} >
+            <IconLeft width={24} height={24} fill={palate.light.textSecondary} />
+          </TouchableOpacity>
           <View
             style={{
               position: 'absolute',

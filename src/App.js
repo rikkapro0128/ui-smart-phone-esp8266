@@ -9,6 +9,8 @@ import { setUser } from '~/store/signSlice';
 import { useState, useEffect } from 'react';
 import { Auth } from '~/auth/index.js';
 import LoadingPage from '~/components/LoadingPage';
+import Modal from '~/components/Modal';
+import { ModalProvider } from '~/context/modal.js';
 
 import { LandingPage, SignAuth, Controller } from '~/screen';
 
@@ -49,26 +51,30 @@ export default function App() {
   }, []);
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer>
-        {loading ? (
-          <LoadingPage title={'Kiểm tra dăng nhập'} />
-        ) : checkUser ? (
-          /* Navigation By Private */
-          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Panel">
-            {privateScreen.map((screen) => (
-              <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
-            ))}
-          </Stack.Navigator>
-        ) : (
-          /* Navigation By Public */
-          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="LandingPage">
-            {publicScreen.map((screen) => (
-              <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
-            ))}
-          </Stack.Navigator>
-        )}
-      </NavigationContainer>
-    </GestureHandlerRootView>
+    <ModalProvider value={{ name: 'miru' }}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer>
+          {loading ? (
+            <LoadingPage title={'Kiểm tra dăng nhập'} />
+          ) : checkUser ? (
+            /* Navigation By Private */
+            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Panel">
+              {privateScreen.map((screen) => (
+                <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
+              ))}
+            </Stack.Navigator>
+          ) : (
+            /* Navigation By Public */
+            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="LandingPage">
+              {publicScreen.map((screen) => (
+                <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
+              ))}
+            </Stack.Navigator>
+          )}
+        </NavigationContainer>
+        {/* Modal */}
+        <Modal />
+      </GestureHandlerRootView>
+    </ModalProvider>
   );
 }

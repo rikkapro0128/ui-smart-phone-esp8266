@@ -1,7 +1,8 @@
 import { memo } from 'react';
 import { StatusBar, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Panel, Profile, Setting } from '~/tabs';
+import Panel from '~/screen/Controller/Panel';
+import Profile from '~/screen/Controller/Profile';
 import { palate } from '~/theme/palate.js';
 
 const Stack = createNativeStackNavigator();
@@ -16,8 +17,6 @@ const tabs = [
     component: Profile,
   },
 ];
-
-
 
 function Controller() {
   return (

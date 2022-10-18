@@ -1,12 +1,10 @@
-import { memo } from 'react'
-import { Text, View, Dimensions, TouchableOpacity } from 'react-native'
-import { palate } from '~/theme/palate.js'
-import NotFound from '~/components/NotFound/default.js'
-
-const height = Dimensions.get('screen').height
+import { memo } from 'react';
+import { Text, View, TouchableOpacity } from 'react-native';
+import { palate } from '~/theme/palate.js';
+import NotFound from '~/components/NotFound/default.js';
 
 function Devices({ navigation, route }) {
-  const { title, field, btnTitle } = route.params
+  const { title, field, btnTitle } = route.params;
   return (
     <View
       style={{

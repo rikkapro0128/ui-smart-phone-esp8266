@@ -4,7 +4,7 @@ import { palate } from '~/theme/palate.js'
 import TabBar from '~/components/TabBar'
 import { Drone, PointMap, SettingLighter, DatabaseLighter, Chart } from '~/Icons'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import Config from '~/tabs/Panel/Config/index.js'
+import { Config } from '~/tabs'
 import { useSelector } from 'react-redux';
 import { UserLine } from '~/Icons';
 
