@@ -1,10 +1,54 @@
-import { memo } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
-import { palate } from '~/theme/palate.js';
-import NotFound from '~/components/NotFound/default.js';
+import { memo, useEffect } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native'
+import { palate } from '~/theme/palate.js'
+import NotFound from '~/components/NotFound/default.js'
+import { useModal } from '~/hooks/useModal.js'
 
-function Devices({ navigation, route }) {
+const styles = StyleSheet.create({
+  input: {
+    paddingVertical: 10,
+    marginTop: 6,
+    fontSize: 16
+  }
+})
+
+function AddDevice() {
+  return (
+    <View>
+      <TextInput
+        style={styles.input}
+        placeholder={'Nhập ID thiết bị bạn sở hữu'}
+        underlineColorAndroid={'transparent'}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder={'Hãy đặt tên thiết bị này'}
+        underlineColorAndroid={'transparent'}
+      />
+    </View>
+  );
+}
+
+function Configs({ navigation, route }) {
   const { title, field, btnTitle } = route.params;
+  const [stateModal, setStateModal, openModal, closeModal] = useModal();
+
+  useEffect(() => {
+    setStateModal({
+      ...stateModal, 
+      title: 'Đăng ký thiết bị mới', 
+      children: <AddDevice />, 
+      onAccept: () => {
+        console.log('Accept');
+        closeModal();
+      },
+      onCancel: () => {
+        console.log('Cancel');
+        closeModal();
+      },
+    });
+  }, [])
+
   return (
     <View
       style={{
@@ -24,7 +68,13 @@ function Devices({ navigation, route }) {
       </Text>
       <NotFound type={field} title={title} />
       {btnTitle ? (
-        <TouchableOpacity style={{ marginBottom: 20 }} activeOpacity={0.3}>
+        <TouchableOpacity
+          onPress={() => {
+            openModal()
+          }}
+          style={{ marginBottom: 20 }}
+          activeOpacity={0.3}
+        >
           <Text
             style={{
               color: palate.light.main,
@@ -44,4 +94,4 @@ function Devices({ navigation, route }) {
   )
 }
 
-export default memo(Devices)
+export default memo(Configs)

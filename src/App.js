@@ -51,7 +51,8 @@ export default function App() {
   }, []);
 
   return (
-    <ModalProvider value={{ name: 'miru' }}>
+    // value={{ stateModal, setStateModal }}
+    <ModalProvider >
       <GestureHandlerRootView style={{ flex: 1 }}>
         <NavigationContainer>
           {loading ? (
