@@ -1,13 +1,13 @@
-import { memo, useState } from 'react'
-import { View, Text, Dimensions, TouchableOpacity } from 'react-native'
+import { memo, useState } from 'react';
+import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
 import { palate } from '~/theme/palate.js';
 import { useNavigation } from '@react-navigation/native';
 
-const heightScreen = Dimensions.get('screen').height
+const heightScreen = Dimensions.get('screen').height;
 
 function TabBar({ height = 8, menu }) {
   const navigation = useNavigation();
-  const [heightFit, setHeightFit] = useState(() => Math.floor((heightScreen * height) / 100))
+  const [heightFit, setHeightFit] = useState(() => Math.floor((heightScreen * height) / 100));
 
   // console.log(heightScreen)
 
@@ -39,7 +39,7 @@ function TabBar({ height = 8, menu }) {
               borderRadius: 8,
             }}
           >
-            <TouchableOpacity activeOpacity={0.5} onPress={() => { navigation.navigate(item.field) }}>
+            <TouchableOpacity activeOpacity={0.5} onPress={() => { navigation.navigate(item.field); }}>
               <View
                 style={{
                   alignItems: 'center',
@@ -64,7 +64,7 @@ function TabBar({ height = 8, menu }) {
         ))}
       </View>
     </View>
-  )
+  );
 }
 
-export default memo(TabBar)
+export default memo(TabBar);

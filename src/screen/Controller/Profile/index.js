@@ -79,9 +79,9 @@ function Profile({ navigation }) {
             try {
               await signOut(Auth);
               dispatch(clearAccount());
-              if(typeSignMethod === 'google') {
+              if (typeSignMethod === 'google') {
                 const isSignIn = await GoogleSignin.isSignedIn();
-                if(isSignIn) { await GoogleSignin.signOut(); }
+                if (isSignIn) { await GoogleSignin.signOut(); }
               }
             } catch (error) {
               // console.log(error);
@@ -111,7 +111,7 @@ function Profile({ navigation }) {
             position: 'relative',
           }}
         >
-          <TouchableOpacity style={{ position: 'absolute', left: 0, top: 0, padding: 10, marginLeft: 20, marginTop: 20, zIndex: 999 }} onPress={() => { navigation.goBack()}} activeOpacity={0.8} >
+          <TouchableOpacity style={{ position: 'absolute', left: 0, top: 0, padding: 10, marginLeft: 20, marginTop: 20, zIndex: 999 }} onPress={() => { navigation.goBack();}} activeOpacity={0.8} >
             <IconLeft width={24} height={24} fill={palate.light.textSecondary} />
           </TouchableOpacity>
           <View
@@ -165,7 +165,7 @@ function Profile({ navigation }) {
             }}
           >
             {
-              user.photoURL 
+              user.photoURL
               ?
               <Image
                 source={{
@@ -182,7 +182,7 @@ function Profile({ navigation }) {
                 width: '100%',
                 height: '100%',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
               }}>
                 <UserLine width={48} height={48} fill={palate.light.textSecondary} />
               </View>

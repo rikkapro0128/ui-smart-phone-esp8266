@@ -4,7 +4,7 @@ import { initializeAuth, getReactNativePersistence } from 'firebase/auth/react-n
 
 import { config } from '~/auth/firebaseConfig.js';
 
-const App = initializeApp(config);
+export const App = initializeApp(config);
 
 export const Auth = initializeAuth(App, {
   persistence: getReactNativePersistence(AsyncStorage),

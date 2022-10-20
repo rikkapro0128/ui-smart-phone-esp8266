@@ -1,10 +1,10 @@
-import { memo } from 'react'
-import { View, Text, Image } from 'react-native'
-import { palate } from '~/theme/palate.js'
-import TabBar from '~/components/TabBar'
-import { Drone, PointMap, SettingLighter, DatabaseLighter, Chart } from '~/Icons'
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { Config } from '~/tabs'
+import { memo } from 'react';
+import { View, Text, Image } from 'react-native';
+import { palate } from '~/theme/palate.js';
+import TabBar from '~/components/TabBar';
+import { Drone, PointMap, SettingLighter, DatabaseLighter, Chart } from '~/Icons';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { Config } from '~/tabs';
 import { useSelector } from 'react-redux';
 import { UserLine } from '~/Icons';
 
@@ -14,7 +14,7 @@ const iconPropCommon = {
   width: 26,
   height: 26,
   fill: palate.light.textSecondary,
-}
+};
 
 const menu = [
   {
@@ -45,7 +45,7 @@ const menu = [
     name: 'Biểu đồ',
     icon: <Chart {...iconPropCommon} />,
   },
-]
+];
 
 function Panel({ navigation }) {
   const user = useSelector((state) => state.sign.user);
@@ -99,14 +99,14 @@ function Panel({ navigation }) {
               height: 50,
               borderRadius: 50,
               borderColor: palate.light.textSecondary,
-              borderWidth: 2
+              borderWidth: 2,
             }}
             onTouchStart={() => {
-              navigation.navigate('Profile')
+              navigation.navigate('Profile');
             }}
           >
             {
-              user.photoURL 
+              user.photoURL
                 ?
                 <Image
                   source={{
@@ -139,7 +139,7 @@ function Panel({ navigation }) {
       </Tab.Navigator>
       <TabBar height={8} menu={menu} />
     </View>
-  )
+  );
 }
 
-export default memo(Panel)
+export default memo(Panel);

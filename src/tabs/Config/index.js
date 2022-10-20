@@ -1,16 +1,16 @@
-import { memo, useEffect } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native'
-import { palate } from '~/theme/palate.js'
-import NotFound from '~/components/NotFound/default.js'
-import { useModal } from '~/hooks/useModal.js'
+import { memo, useEffect } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { palate } from '~/theme/palate.js';
+import NotFound from '~/components/NotFound/default.js';
+import { useModal } from '~/hooks/useModal.js';
 
 const styles = StyleSheet.create({
   input: {
     paddingVertical: 10,
     marginTop: 6,
-    fontSize: 16
-  }
-})
+    fontSize: 16,
+  },
+});
 
 function AddDevice() {
   return (
@@ -35,9 +35,9 @@ function Configs({ navigation, route }) {
 
   useEffect(() => {
     setStateModal({
-      ...stateModal, 
-      title: 'Đăng ký thiết bị mới', 
-      children: <AddDevice />, 
+      ...stateModal,
+      title: 'Đăng ký thiết bị mới',
+      children: <AddDevice />,
       onAccept: () => {
         console.log('Accept');
         closeModal();
@@ -47,7 +47,7 @@ function Configs({ navigation, route }) {
         closeModal();
       },
     });
-  }, [])
+  }, []);
 
   return (
     <View
@@ -70,7 +70,7 @@ function Configs({ navigation, route }) {
       {btnTitle ? (
         <TouchableOpacity
           onPress={() => {
-            openModal()
+            openModal();
           }}
           style={{ marginBottom: 20 }}
           activeOpacity={0.3}
@@ -91,7 +91,7 @@ function Configs({ navigation, route }) {
         </TouchableOpacity>
       ) : null}
     </View>
-  )
+  );
 }
 
-export default memo(Configs)
+export default memo(Configs);

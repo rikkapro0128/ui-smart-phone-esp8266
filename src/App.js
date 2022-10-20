@@ -12,7 +12,7 @@ import LoadingPage from '~/components/LoadingPage';
 import Modal from '~/components/Modal';
 import { ModalProvider } from '~/context/modal.js';
 
-import { LandingPage, SignAuth, Controller } from '~/screen';
+import { LandingPage, SignAuth, Controller, Demo } from '~/screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +24,10 @@ const publicScreen = [
   {
     name: 'Sign',
     component: SignAuth,
+  },
+  {
+    name: 'Demo',
+    component: Demo,
   },
 ];
 
@@ -59,14 +63,14 @@ export default function App() {
             <LoadingPage title={'Kiểm tra dăng nhập'} />
           ) : checkUser ? (
             /* Navigation By Private */
-            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Panel">
+            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Controller">
               {privateScreen.map((screen) => (
                 <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
               ))}
             </Stack.Navigator>
           ) : (
             /* Navigation By Public */
-            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="LandingPage">
+            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Demo">
               {publicScreen.map((screen) => (
                 <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
               ))}

@@ -1,6 +1,6 @@
-import { memo } from "react";
+import { memo } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
-import { palate } from '~/theme/palate.js'
+import { palate } from '~/theme/palate.js';
 
 function Button({ children, content, bgColor = palate.light.main, color = palate.light.bgSecondary, padding = 10, onPress })  {
   return (
@@ -10,10 +10,10 @@ function Button({ children, content, bgColor = palate.light.main, color = palate
         color: color,
         padding: padding,
         borderRadius: 6,
-        marginLeft: 10
+        marginLeft: 10,
       }}>{ content }</Text> }
     </TouchableOpacity>
-  )
+  );
 }
 
 export default memo(Button);

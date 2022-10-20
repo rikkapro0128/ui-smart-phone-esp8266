@@ -1,6 +1,6 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import { memo } from 'react'
-import { Google } from '~/Icons'
+import { View, Text, TouchableOpacity } from 'react-native';
+import { memo } from 'react';
+import { Google } from '~/Icons';
 
 function SignSocial({
   socialName = 'google',
@@ -15,7 +15,7 @@ function SignSocial({
   return (
     <TouchableOpacity
       onPress={(event) => {
-        onPress ? onPress(socialName, event) : null
+        onPress ? onPress(socialName, event) : null;
       }}
       activeOpacity={0.8}
     >
@@ -53,7 +53,7 @@ function SignSocial({
         </Text>
       </View>
     </TouchableOpacity>
-  )
+  );
 }
 
-export default memo(SignSocial)
+export default memo(SignSocial);

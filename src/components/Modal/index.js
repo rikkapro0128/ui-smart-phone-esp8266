@@ -1,8 +1,8 @@
-import { memo, useContext, useEffect } from 'react'
-import { View, TouchableWithoutFeedback , Text, Dimensions } from 'react-native'
-import { useModal } from '~/hooks/useModal.js'
-import { palate } from '~/theme/palate.js'
-import Button from '~/components/Button'
+import { memo, useContext, useEffect } from 'react';
+import { View, TouchableWithoutFeedback , Text, Dimensions } from 'react-native';
+import { useModal } from '~/hooks/useModal.js';
+import { palate } from '~/theme/palate.js';
+import Button from '~/components/Button';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -12,12 +12,12 @@ function Modal() {
 
   useEffect(() => {
     console.log(width, height);
-  }, [])
+  }, []);
 
   return stateModal.status ? (
     <>
-      <TouchableWithoutFeedback 
-        onPress={() => { stateModal.onCancel() }}  
+      <TouchableWithoutFeedback
+        onPress={() => { stateModal.onCancel(); }}
       >
         <View
           style={{
@@ -47,9 +47,9 @@ function Modal() {
           zIndex: 999,
           transform: [
             {
-              translateY: -100
+              translateY: -100,
             },
-          ]
+          ],
         }}
       >
         <View
@@ -80,16 +80,16 @@ function Modal() {
             style={{
               flexDirection: 'row',
               justifyContent: 'flex-end',
-              marginTop: 10
+              marginTop: 10,
             }}
           >
-            {stateModal?.textBtnCancel ? <Button onPress={() => { stateModal.onCancel() }} content={stateModal.textBtnCancel} /> : null}
-            {stateModal?.textBtnAccept ? <Button onPress={() => { stateModal.onAccept() }} content={stateModal.textBtnAccept} bgColor={palate.light.bgSecondary} /> : null}
+            {stateModal?.textBtnCancel ? <Button onPress={() => { stateModal.onCancel(); }} content={stateModal.textBtnCancel} /> : null}
+            {stateModal?.textBtnAccept ? <Button onPress={() => { stateModal.onAccept(); }} content={stateModal.textBtnAccept} bgColor={palate.light.bgSecondary} /> : null}
           </View>
         </View>
       </View>
     </>
-  ) : null
+  ) : null;
 }
 
-export default memo(Modal)
+export default memo(Modal);

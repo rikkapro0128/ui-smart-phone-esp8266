@@ -12,7 +12,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithCredential
+  signInWithCredential,
 } from 'firebase/auth';
 import { Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -103,9 +103,9 @@ function SignAuth({ route, navigation }) {
       }
     } catch (error) {
       console.log(error.message);
-      if(error.message === 'Sign in action cancelled') {
+      if (error.message === 'Sign in action cancelled') {
 
-      }else {
+      } else {
         Alert.alert('Opps, lỗi rồi bạn à', `Đăng nhập bằng ${type} thất bại`, [
           {
             text: 'Hiểu rồi',
