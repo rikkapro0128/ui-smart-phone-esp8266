@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
-import { Button, Card, Input, Modal, Text as TextKitten, Layout } from '@ui-kitten/components'
+import { Button, Card, Input, Modal, Text as TextKitten, Layout, Spinner } from '@ui-kitten/components'
 import { palate } from '~/theme/palate.js'
 import NotFound from '~/components/NotFound/default.js'
 import { AppStorage } from '~/auth/index.js'
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 const db = getDatabase(AppStorage)
 
 function Configs({ navigation, route }) {
-  const { title, field, btnTitle } = route.params
+  const { title, field, btnTitle } = route.params;
   const [visible, setVisible] = useState(false)
   const [type, setType] = useState(field)
   const [meta, setMeta] = useState({ title: '', inputTitle: '' })
@@ -35,6 +35,7 @@ function Configs({ navigation, route }) {
   const user = useSelector((state) => state.sign.user)
   const [pathDevice, setPathDevice] = useState(`user-${user.uid}/devices`)
   const [devices, setDevices] = useState([])
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (type === 'Devices') {
@@ -45,31 +46,32 @@ function Configs({ navigation, route }) {
   }, [type])
 
   useEffect(() => {
-    setPathDevice(`user-${user.uid}/devices`)
+    setPathDevice(`user-${user.uid}/devices`);
   }, [user])
 
   useEffect(() => {
     onValue(ref(db, pathDevice), (snapshot) => {
       if (snapshot.exists()) {
-        const payload = snapshot.val()
-        let temp = []
+        const payload = snapshot.val();
+        let temp = [];
         for (let item in payload) {
-          temp.push(payload[item])
+          temp.push(payload[item]);
         }
-        setDevices(temp)
+        setDevices(temp);
       }
+      setLoading(false);
     })
   }, [])
 
   function hanldeCreateConfig() {
-    setVisible(false)
+    setVisible(false);
     if (type === 'Devices') {
       const genID = Date.now()
       set(ref(db, '/' + `${pathDevice}/node-${genID}`), {
         id: genID,
         name: valInput,
-      })
-      setValInput('')
+      });
+      setValInput('');
     }
   }
 
@@ -91,76 +93,88 @@ function Configs({ navigation, route }) {
         >
           {title}.
         </Text>
-        {devices.length > 0 && field == 'Devices' ? (
-          <ScrollView
-            style={{
+        {
+          loading 
+          ?
+            <View style={{
               flex: 1,
-              marginVertical: 16
-            }}
-          >
-            <View
-              style={{
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-              }}
-            >
-              {devices.map((device, index) => (
-                <Card key={device.id} style={{
-                  width: (windowWidth - 60) / 2,
-                  margin: 5,
-                }}>
-                  <IconModule style={{
-                    alignSelf: 'center'
-                  }} width={64} height={64} />
-                  <TextKitten style={{
-                    textAlign: 'left',
-                    marginTop: 6,
-                  }}>{device.name.length > 20 ? device.name.slice(0, 20) + '...' : device.name }</TextKitten>
-                </Card>
-              ))}
-              {devices.map((device, index) => (
-                <Card key={device.id} style={{
-                  width: (windowWidth - 60) / 2,
-                  margin: 5,
-                }}>
-                  <IconModule style={{
-                    alignSelf: 'center'
-                  }} width={64} height={64} />
-                  <TextKitten style={{
-                    textAlign: 'left',
-                    marginTop: 6,
-                  }}>{device.name.length > 20 ? device.name.slice(0, 20) + '...' : device.name }</TextKitten>
-                </Card>
-              ))}
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+              <Spinner size='giant'/>
+              <TextKitten style={{
+                marginTop: 20,
+                fontSize: 20,
+              }}>Đang tải thiết bị có sẵn...</TextKitten>
             </View>
-          </ScrollView>
-        ) : (
-          <NotFound type={field} title={title} />
-        )}
-        {btnTitle ? (
-          <TouchableOpacity
-            onPress={() => {
-              setType(field)
-              setVisible(true)
-            }}
-            style={{ marginBottom: 20 }}
-            activeOpacity={0.3}
-          >
-            <Text
-              style={{
-                color: palate.light.main,
-                textAlign: 'center',
-                padding: 20,
-                borderRadius: 8,
-                fontSize: 16,
-                borderColor: palate.light.main,
-                borderWidth: 2,
-              }}
-            >
-              {btnTitle}
-            </Text>
-          </TouchableOpacity>
-        ) : null}
+          :
+            <>
+              {devices.length > 0 && field == 'Devices' ? (
+                <>
+                  <ScrollView
+                    style={{
+                      flex: 1,
+                      marginVertical: 16
+                    }}
+                  >
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                      }}
+                    >
+                      {devices.map((device, index) => (
+                        <Card key={device.id} style={{
+                          width: (windowWidth - 60) / 2,
+                          margin: 5,
+                        }}
+                          onPress={() => {
+                            navigation.navigate('Device', { path: pathDevice, ...device });
+                          }}
+                        >
+                          <IconModule style={{
+                            alignSelf: 'center'
+                          }} width={64} height={64} />
+                          <TextKitten style={{
+                            textAlign: 'left',
+                            marginTop: 6,
+                          }}>{device.name.length > 20 ? device.name.slice(0, 20) + '...' : device.name }</TextKitten>
+                        </Card>
+                      ))}
+                    </View>
+                  </ScrollView>
+                </>
+              ) : (
+                <>
+                  <NotFound type={field} title={title} />
+                  {btnTitle ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setType(field)
+                        setVisible(true)
+                      }}
+                      style={{ marginBottom: 20 }}
+                      activeOpacity={0.3}
+                    >
+                      <Text
+                        style={{
+                          color: palate.light.main,
+                          textAlign: 'center',
+                          padding: 20,
+                          borderRadius: 8,
+                          fontSize: 16,
+                          borderColor: palate.light.main,
+                          borderWidth: 2,
+                        }}
+                      >
+                        {btnTitle}
+                      </Text>
+                    </TouchableOpacity>
+                  ) : null}
+                </>
+              )}
+            </>
+        }
       </View>
       <Modal
         backdropStyle={{

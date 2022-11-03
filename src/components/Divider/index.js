@@ -46,7 +46,7 @@ function Divider({
           backgroundColor: lineColor,
         }}
       />
-      <Text style={{ paddingHorizontal, color, fontSize: size, textTransform }}>{content}</Text>
+      { content ? <Text style={{ paddingHorizontal, color, fontSize: size, textTransform }}>{content}</Text> : null }
       <View
         style={{
           ...styles.line,
