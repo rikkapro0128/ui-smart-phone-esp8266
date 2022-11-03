@@ -52,7 +52,7 @@ function Panel({ navigation }) {
   return (
     <View
       style={{
-        paddingHorizontal: 40,
+        paddingHorizontal: 20,
         flex: 1,
       }}
     >

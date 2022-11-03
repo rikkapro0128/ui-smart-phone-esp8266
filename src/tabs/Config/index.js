@@ -1,97 +1,218 @@
-import { memo, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
-import { palate } from '~/theme/palate.js';
-import NotFound from '~/components/NotFound/default.js';
-import { useModal } from '~/hooks/useModal.js';
+import { memo, useEffect, useState } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { Button, Card, Input, Modal, Text as TextKitten, Layout } from '@ui-kitten/components'
+import { palate } from '~/theme/palate.js'
+import NotFound from '~/components/NotFound/default.js'
+import { AppStorage } from '~/auth/index.js'
+import { getDatabase, ref, set, onValue } from 'firebase/database'
+import { v1 as uuidv1 } from 'uuid'
+import Device from '~/components/Device'
+import { useSelector } from 'react-redux'
+import { IconModule } from '~/Icons'
+
+const windowWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   input: {
     paddingVertical: 10,
     marginTop: 6,
     fontSize: 16,
+    backgroundColor: '#E5E7EB',
+    paddingHorizontal: 15,
+    marginVertical: 5,
+    borderRadius: 6,
   },
-});
+})
 
-function AddDevice() {
-  return (
-    <View>
-      <TextInput
-        style={styles.input}
-        placeholder={'Nhập ID thiết bị bạn sở hữu'}
-        underlineColorAndroid={'transparent'}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder={'Hãy đặt tên thiết bị này'}
-        underlineColorAndroid={'transparent'}
-      />
-    </View>
-  );
-}
+const db = getDatabase(AppStorage)
 
 function Configs({ navigation, route }) {
-  const { title, field, btnTitle } = route.params;
-  const [stateModal, setStateModal, openModal, closeModal] = useModal();
+  const { title, field, btnTitle } = route.params
+  const [visible, setVisible] = useState(false)
+  const [type, setType] = useState(field)
+  const [meta, setMeta] = useState({ title: '', inputTitle: '' })
+  const [valInput, setValInput] = useState('')
+  const user = useSelector((state) => state.sign.user)
+  const [pathDevice, setPathDevice] = useState(`user-${user.uid}/devices`)
+  const [devices, setDevices] = useState([])
 
   useEffect(() => {
-    setStateModal({
-      ...stateModal,
-      title: 'Đăng ký thiết bị mới',
-      children: <AddDevice />,
-      onAccept: () => {
-        console.log('Accept');
-        closeModal();
-      },
-      onCancel: () => {
-        console.log('Cancel');
-        closeModal();
-      },
-    });
-  }, []);
+    if (type === 'Devices') {
+      setMeta({ title: 'Đăng ký thiết bị', inputTitle: 'Nhập tên thiết bị...' })
+    } else if (type === 'Areas') {
+      setMeta({ title: 'Đăng ký khu vực', inputTitle: 'Nhập tên khu vực...' })
+    }
+  }, [type])
+
+  useEffect(() => {
+    setPathDevice(`user-${user.uid}/devices`)
+  }, [user])
+
+  useEffect(() => {
+    onValue(ref(db, pathDevice), (snapshot) => {
+      if (snapshot.exists()) {
+        const payload = snapshot.val()
+        let temp = []
+        for (let item in payload) {
+          temp.push(payload[item])
+        }
+        setDevices(temp)
+      }
+    })
+  }, [])
+
+  function hanldeCreateConfig() {
+    setVisible(false)
+    if (type === 'Devices') {
+      const genID = Date.now()
+      set(ref(db, '/' + `${pathDevice}/node-${genID}`), {
+        id: genID,
+        name: valInput,
+      })
+      setValInput('')
+    }
+  }
 
   return (
-    <View
-      style={{
-        paddingVertical: 20,
-        justifyContent: 'space-between',
-        flex: 1,
-      }}
-    >
-      <Text
+    <>
+      <View
         style={{
-          fontSize: 26,
-          fontWeight: 'bold',
-          color: palate.light.text,
+          paddingVertical: 20,
+          justifyContent: 'space-between',
+          flex: 1,
         }}
       >
-        {title}.
-      </Text>
-      <NotFound type={field} title={title} />
-      {btnTitle ? (
-        <TouchableOpacity
-          onPress={() => {
-            openModal();
+        <Text
+          style={{
+            fontSize: 26,
+            fontWeight: 'bold',
+            color: palate.light.text,
           }}
-          style={{ marginBottom: 20 }}
-          activeOpacity={0.3}
+        >
+          {title}.
+        </Text>
+        {devices.length > 0 && field == 'Devices' ? (
+          <ScrollView
+            style={{
+              flex: 1,
+              marginVertical: 16
+            }}
+          >
+            <View
+              style={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}
+            >
+              {devices.map((device, index) => (
+                <Card key={device.id} style={{
+                  width: (windowWidth - 60) / 2,
+                  margin: 5,
+                }}>
+                  <IconModule style={{
+                    alignSelf: 'center'
+                  }} width={64} height={64} />
+                  <TextKitten style={{
+                    textAlign: 'left',
+                    marginTop: 6,
+                  }}>{device.name.length > 20 ? device.name.slice(0, 20) + '...' : device.name }</TextKitten>
+                </Card>
+              ))}
+              {devices.map((device, index) => (
+                <Card key={device.id} style={{
+                  width: (windowWidth - 60) / 2,
+                  margin: 5,
+                }}>
+                  <IconModule style={{
+                    alignSelf: 'center'
+                  }} width={64} height={64} />
+                  <TextKitten style={{
+                    textAlign: 'left',
+                    marginTop: 6,
+                  }}>{device.name.length > 20 ? device.name.slice(0, 20) + '...' : device.name }</TextKitten>
+                </Card>
+              ))}
+            </View>
+          </ScrollView>
+        ) : (
+          <NotFound type={field} title={title} />
+        )}
+        {btnTitle ? (
+          <TouchableOpacity
+            onPress={() => {
+              setType(field)
+              setVisible(true)
+            }}
+            style={{ marginBottom: 20 }}
+            activeOpacity={0.3}
+          >
+            <Text
+              style={{
+                color: palate.light.main,
+                textAlign: 'center',
+                padding: 20,
+                borderRadius: 8,
+                fontSize: 16,
+                borderColor: palate.light.main,
+                borderWidth: 2,
+              }}
+            >
+              {btnTitle}
+            </Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
+      <Modal
+        backdropStyle={{
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        }}
+        visible={visible}
+      >
+        <Card
+          style={{
+            width: windowWidth - 80,
+          }}
+          disabled={true}
         >
           <Text
             style={{
-              color: palate.light.main,
-              textAlign: 'center',
-              padding: 20,
-              borderRadius: 8,
-              fontSize: 16,
-              borderColor: palate.light.main,
-              borderWidth: 2,
+              marginBottom: 15,
+              fontSize: 17,
             }}
           >
-            {btnTitle}
+            {meta.title}
           </Text>
-        </TouchableOpacity>
-      ) : null}
-    </View>
-  );
+          <Input
+            style={{
+              marginBottom: 15,
+            }}
+            placeholder={meta.inputTitle}
+            value={valInput}
+            onChangeText={(val) => setValInput(val)}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <Button
+              size="small"
+              style={{
+                marginRight: 10,
+              }}
+              onPress={() => setVisible(false)}
+            >
+              Huỷ
+            </Button>
+            <Button size="small" onPress={hanldeCreateConfig}>
+              Tạo
+            </Button>
+          </View>
+        </Card>
+      </Modal>
+    </>
+  )
 }
 
-export default memo(Configs);
+export default memo(Configs)

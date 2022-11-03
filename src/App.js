@@ -7,14 +7,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '~/store/signSlice';
 import { useState, useEffect } from 'react';
-import { Auth } from '~/auth/index.js';
+import { getDatabase, ref, child, get, set, onValue } from "firebase/database";
 import LoadingPage from '~/components/LoadingPage';
-import Modal from '~/components/Modal';
-import { ModalProvider } from '~/context/modal.js';
+// import { v1 as uuidv1 } from 'uuid';
 
-import { LandingPage, SignAuth, Controller, Demo } from '~/screen';
+import { LandingPage, SignAuth, Controller } from '~/screen';
+import { Auth, AppStorage } from '~/auth/index.js';
 
 const Stack = createNativeStackNavigator();
+const db = getDatabase(AppStorage);
 
 const publicScreen = [
   {
@@ -24,10 +25,6 @@ const publicScreen = [
   {
     name: 'Sign',
     component: SignAuth,
-  },
-  {
-    name: 'Demo',
-    component: Demo,
   },
 ];
 
@@ -44,42 +41,45 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = Auth.onAuthStateChanged((user) => {
-      // console.log(user);
+    const unsubscribe = Auth.onAuthStateChanged(async (user) => {
       if (user) {
         dispatch(setUser(user.toJSON()));
+        setLoading(false);
+        let uid = `user-${user.uid}`;
+        const snapshot = await get(child(ref(db), uid));
+        if(snapshot.exists()) {
+          console.log(snapshot.val());
+        }else {
+          set(ref(db, `${uid}/`), {
+            id: user.uid,
+          });
+        }
       }
-      setLoading(false);
     });
     return unsubscribe;
   }, []);
 
   return (
-    // value={{ stateModal, setStateModal }}
-    <ModalProvider >
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <NavigationContainer>
-          {loading ? (
-            <LoadingPage title={'Kiểm tra dăng nhập'} />
-          ) : checkUser ? (
-            /* Navigation By Private */
-            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Controller">
-              {privateScreen.map((screen) => (
-                <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
-              ))}
-            </Stack.Navigator>
-          ) : (
-            /* Navigation By Public */
-            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Demo">
-              {publicScreen.map((screen) => (
-                <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
-              ))}
-            </Stack.Navigator>
-          )}
-        </NavigationContainer>
-        {/* Modal */}
-        <Modal />
-      </GestureHandlerRootView>
-    </ModalProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        {loading ? (
+          <LoadingPage title={'Kiểm tra dăng nhập'} />
+        ) : checkUser ? (
+          /* Navigation By Private */
+          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Controller">
+            {privateScreen.map((screen) => (
+              <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
+            ))}
+          </Stack.Navigator>
+        ) : (
+          /* Navigation By Public */
+          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="LandingPage">
+            {publicScreen.map((screen) => (
+              <Stack.Screen key={screen.name} name={screen.name} component={screen.component} />
+            ))}
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }

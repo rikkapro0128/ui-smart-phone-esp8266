@@ -17,7 +17,7 @@ function TabBar({ height = 8, menu }) {
         height: heightFit,
         borderRadius: 10,
         backgroundColor: palate.light.bgSecondary,
-        marginHorizontal: -20,
+        // marginHorizontal: -20,
         marginBottom: 20,
         elevation: 1,
       }}
