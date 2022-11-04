@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState, useRef } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import Divider from '~/components/Divider';
 import TopBar from '~/components/TopBar';
@@ -23,11 +23,61 @@ const styles = StyleSheet.create({
 
 function Device({ route }) {
   const { path, id, name, ip, doneConfig } = route.params;
-  const [valIP, setValIP] = useState();
+  const [valIP, setValIP] = useState({
+    domain_1: undefined,
+    domain_2: undefined,
+    domain_3: undefined,
+    domain_4: undefined,
+  });
+  const [presentFocus, setPresentFocus] = useState('ip_1');
+  const ref_ip_1 = useRef();
+  const ref_ip_2 = useRef();
+  const ref_ip_3 = useRef();
+  const ref_ip_4 = useRef();
 
   useEffect(() => {
 
   }, []);
+
+  function handleIPAddress(type, val) {
+    const getIndex = parseInt(String(type).split('_')[1]);
+    console.log(getIndex, val, val.length);
+    setValIP({ ...valIP, type: val });
+    if(val.length >= 3) {
+      if(getIndex === 1) {
+        ref_ip_2.current.focus();
+        setPresentFocus(() => 'ip_2');
+      }else if(getIndex === 2) {
+        ref_ip_3.current.focus();
+        setPresentFocus(() => 'ip_3');
+      }else if(getIndex === 3) {
+        ref_ip_4.current.focus();
+        setPresentFocus(() => 'ip_4');
+      }else {
+        ref_ip_4.current.blur();
+      }
+    }
+  }
+
+  function handleFocus(type) {
+    const getIndex = String(type).split('_')[1];
+    setPresentFocus(() => `ip_${getIndex}`);
+  }
+
+  function handleSubmitInput(type) {
+    if(type === 'domain_1') {
+      ref_ip_2.current.focus();
+      setPresentFocus(() => 'ip_2');
+    }else if(type === 'domain_2') {
+      ref_ip_3.current.focus();
+      setPresentFocus(() => 'ip_3');
+    }else if(type === 'domain_3') {
+      ref_ip_4.current.focus();
+      setPresentFocus(() => 'ip_4');
+    }else {
+      ref_ip_4.current.blur();
+    }
+  }
 
   return (
     <>
@@ -114,19 +164,47 @@ function Device({ route }) {
                 <TextInput 
                   style={styles.inputIp}
                   keyboardType='numeric'
-                  placeholder='xxx' />
+                  placeholder='xxx'
+                  autoFocus={true}
+                  value={valIP.domain_1}
+                  onFocus={() => handleFocus('domain_1')}
+                  onSubmitEditing={() => handleSubmitInput('domain_1')}
+                  blurOnSubmit={false}
+                  onChangeText={(val) => handleIPAddress('domain_1', val)}
+                />
                 <TextInput 
                   style={styles.inputIp}
                   keyboardType='numeric'
-                  placeholder='xxx' />
+                  placeholder='xxx'
+                  value={valIP.domain_2}
+                  ref={ref_ip_2}
+                  onFocus={() => handleFocus('domain_2')}
+                  onSubmitEditing={() => handleSubmitInput('domain_2')}
+                  blurOnSubmit={false}
+                  onChangeText={(val) => handleIPAddress('domain_2', val)}
+                  />
                 <TextInput 
                   style={styles.inputIp}
                   keyboardType='numeric'
-                  placeholder='xxx' />
+                  placeholder='xxx'
+                  value={valIP.domain_3}
+                  ref={ref_ip_3}
+                  onFocus={() => handleFocus('domain_3')}
+                  onSubmitEditing={() => handleSubmitInput('domain_3')}
+                  blurOnSubmit={false}
+                  onChangeText={(val) => handleIPAddress('domain_3', val)}
+                  />
                 <TextInput 
                   style={styles.inputIp}
                   keyboardType='numeric'
-                  placeholder='xxx' />
+                  placeholder='xxx'
+                  value={valIP.domain_4}
+                  ref={ref_ip_4}
+                  onFocus={() => handleFocus('domain_4')}
+                  onSubmitEditing={() => handleSubmitInput('domain_4')}
+                  blurOnSubmit={false}
+                  onChangeText={(val) => handleIPAddress('domain_4', val)}
+                />
               </View>
               <Button size='giant' style={{
                 marginTop: 15,
