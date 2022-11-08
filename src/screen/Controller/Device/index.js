@@ -41,7 +41,7 @@ function Device({ route }) {
 
   function handleIPAddress(type, val) {
     const getIndex = parseInt(String(type).split('_')[1]);
-    console.log(getIndex, val, val.length);
+    // console.log(getIndex, val, val.length);
     setValIP({ ...valIP, type: val });
     if(val.length >= 3) {
       if(getIndex === 1) {

@@ -55,7 +55,7 @@ function Configs({ navigation, route }) {
         const payload = snapshot.val();
         let temp = [];
         for (let item in payload) {
-          temp.push(payload[item]);
+          temp.push({ ...payload[item], id: item.split('-')[1] });
         }
         setDevices(temp);
       }
@@ -109,7 +109,7 @@ function Configs({ navigation, route }) {
             </View>
           :
             <>
-              {devices.length > 0 && field == 'Devices' ? (
+              {devices.length > 0 && field == 'Nodes' ? (
                 <>
                   <ScrollView
                     style={{

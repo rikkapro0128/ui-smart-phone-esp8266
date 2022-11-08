@@ -1,10 +1,11 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { View, Text, Image } from 'react-native';
 import { palate } from '~/theme/palate.js';
+import NotFound from '~/components/NotFound/default.js';
 import TabBar from '~/components/TabBar';
 import { Drone, PointMap, SettingLighter, DatabaseLighter, Chart } from '~/Icons';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { Config } from '~/tabs';
+import { CreateNode, ConnectDevice } from '~/tabs';
 import { useSelector } from 'react-redux';
 import { UserLine } from '~/Icons';
 
@@ -18,10 +19,11 @@ const iconPropCommon = {
 
 const menu = [
   {
-    field: 'Devices',
+    field: 'Nodes',
     name: 'Thiết bị',
     icon: <Drone {...iconPropCommon} />,
     btnTitle: 'Đăng ký thiết bị mới',
+    component: CreateNode,
   },
   {
     field: 'Areas',
@@ -30,16 +32,17 @@ const menu = [
     btnTitle: 'Đăng ký khu vực mới',
   },
   {
-    field: 'Server',
-    name: 'Server',
+    field: 'Connects',
+    name: 'Liên kết',
     icon: <DatabaseLighter {...iconPropCommon} />,
-    btnTitle: 'Đăng ký Server API',
+    btnTitle: 'liên kết WIFI cho thiết bị',
+    component: ConnectDevice
   },
-  {
-    field: 'Setting',
-    name: 'Setting',
-    icon: <SettingLighter {...iconPropCommon} />,
-  },
+  // {
+  //   field: 'Setting',
+  //   name: 'Setting',
+  //   icon: <SettingLighter {...iconPropCommon} />,
+  // },
   {
     field: 'Charts',
     name: 'Biểu đồ',
@@ -49,6 +52,7 @@ const menu = [
 
 function Panel({ navigation }) {
   const user = useSelector((state) => state.sign.user);
+
   return (
     <View
       style={{
@@ -132,9 +136,9 @@ function Panel({ navigation }) {
         </View>
       </View>
       {/* Tabar switch Panel */}
-      <Tab.Navigator tabBar={() => null} initialRouteName="Devices">
+      <Tab.Navigator tabBar={() => null} initialRouteName="Connects">
         {menu.map((tab) => (
-          <Tab.Screen key={tab.field} name={tab.field} initialParams={{ title: tab.name, field: tab.field, btnTitle: tab?.btnTitle || null }} component={Config} />
+          <Tab.Screen key={tab.field} name={tab.field} initialParams={{ title: tab.name, field: tab.field, btnTitle: tab?.btnTitle || null }} component={tab?.component || NotFound} />
         ))}
       </Tab.Navigator>
       <TabBar height={8} menu={menu} />

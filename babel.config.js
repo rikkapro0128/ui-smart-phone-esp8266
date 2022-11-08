@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 module.exports = function (api) {
   api.cache(true);
   return {
@@ -11,6 +12,12 @@ module.exports = function (api) {
           rootPathSuffix: 'src',
         },
       ],
+      // [
+      //   "react-native-wifi-reborn",
+      //   {
+      //     "fineLocationPermission": false,
+      //   },
+      // ],
     ],
   };
 };
