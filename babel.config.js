@@ -12,12 +12,7 @@ module.exports = function (api) {
           rootPathSuffix: 'src',
         },
       ],
-      // [
-      //   "react-native-wifi-reborn",
-      //   {
-      //     "fineLocationPermission": false,
-      //   },
-      // ],
+      'react-native-paper/babel',
     ],
   };
 };

@@ -1,6 +1,5 @@
 import { memo, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
-import { Button, Card, Input, Modal, Text as TextKitten, Layout, Spinner } from '@ui-kitten/components'
 import { palate } from '~/theme/palate.js'
 import NotFound from '~/components/NotFound/default.js'
 import { AppStorage } from '~/auth/index.js'
@@ -101,11 +100,11 @@ function Configs({ navigation, route }) {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-              <Spinner size='giant'/>
-              <TextKitten style={{
+              {/* <Spinner size='giant'/> */}
+              <Text style={{
                 marginTop: 20,
                 fontSize: 20,
-              }}>Đang tải thiết bị có sẵn...</TextKitten>
+              }}>Đang tải thiết bị có sẵn...</Text>
             </View>
           :
             <>
@@ -124,7 +123,7 @@ function Configs({ navigation, route }) {
                       }}
                     >
                       {devices.map((device, index) => (
-                        <Card key={device.id} style={{
+                        <View key={device.id} style={{
                           width: (windowWidth - 60) / 2,
                           margin: 5,
                         }}
@@ -135,11 +134,11 @@ function Configs({ navigation, route }) {
                           <IconModule style={{
                             alignSelf: 'center'
                           }} width={64} height={64} />
-                          <TextKitten style={{
+                          <Text style={{
                             textAlign: 'left',
                             marginTop: 6,
-                          }}>{device.name.length > 20 ? device.name.slice(0, 20) + '...' : device.name }</TextKitten>
-                        </Card>
+                          }}>{device.name.length > 20 ? device.name.slice(0, 20) + '...' : device.name }</Text>
+                        </View>
                       ))}
                     </View>
                   </ScrollView>
@@ -176,7 +175,7 @@ function Configs({ navigation, route }) {
             </>
         }
       </View>
-      <Modal
+      {/* <Modal
         backdropStyle={{
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
         }}
@@ -224,7 +223,7 @@ function Configs({ navigation, route }) {
             </Button>
           </View>
         </Card>
-      </Modal>
+      </Modal> */}
     </>
   )
 }

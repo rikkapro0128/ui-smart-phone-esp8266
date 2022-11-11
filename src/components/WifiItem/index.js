@@ -1,15 +1,16 @@
 import { memo } from "react";
 import { View, Text, TouchableOpacity } from 'react-native';
 import { IconWifi, IconArrowRight } from '~/Icons';
+import { MD2Colors } from 'react-native-paper';
 
-function WifiItem({ onPress, iconWifi = null, iconNavigate, name = 'wifi name', quality = 0, sizeIconWifi = 24, sizeIconNavigate = 32 }) {
+function WifiItem({ onPress, Icon = null, IconNavigate, name = 'wifi name', quality = 0, sizeIcon = 24, sizeIconNavigate = 32 }) {
 
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       style={{
         flexDirection: 'row',
-        marginVertical: 8,
+        marginVertical: 10,
       }}
       onPress={onPress}
     >
@@ -26,17 +27,25 @@ function WifiItem({ onPress, iconWifi = null, iconNavigate, name = 'wifi name', 
         //     scale: 1.15,
         //   }
         // ],
-        position: 'relative',
-        zIndex: 1,
+        // position: 'relative',
+        // zIndex: 1,
+        // shadowColor: "#72da6b",
+        // shadowOffset: {
+        //   width: 0,
+        //   height: 12,
+        // },
+        // shadowOpacity:  0.64,
+        // shadowRadius: 13.84,
+        // elevation: 17,
       }}>
         {
-          iconWifi
+          Icon
           ? 
-          <iconWifi width={sizeIconWifi} height={sizeIconWifi} />
+          <Icon width={sizeIcon} height={sizeIcon} />
           :
           <IconWifi style={{
             // margin: 20,
-          }} fill={'white'} width={sizeIconWifi} height={sizeIconWifi} />
+          }} fill={'white'} width={sizeIcon} height={sizeIcon} />
         }
       </View>
       <View style={{
@@ -45,7 +54,8 @@ function WifiItem({ onPress, iconWifi = null, iconNavigate, name = 'wifi name', 
         flex: 1,
         paddingLeft: 20,
         flexDirection: 'row',
-        borderRadius: 6,
+        borderBottomRightRadius: 6,
+        borderTopRightRadius: 6,
       }}>
         <View  style={{
           flexDirection: 'row',
@@ -71,9 +81,9 @@ function WifiItem({ onPress, iconWifi = null, iconNavigate, name = 'wifi name', 
           marginRight: 15,
         }}>
           {
-            iconNavigate
+            IconNavigate
             ?
-            <iconNavigate width={sizeIconNavigate} height={sizeIconNavigate} />
+            <IconNavigate fill={MD2Colors.green400} width={sizeIconNavigate} height={sizeIconNavigate} />
             :
             <IconArrowRight fill={'#3E4556'} width={sizeIconNavigate} height={sizeIconNavigate} />
           }

@@ -1,8 +1,7 @@
 import { memo, useEffect, useState, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
 import Divider from '~/components/Divider';
 import TopBar from '~/components/TopBar';
-import { Input, Button } from '@ui-kitten/components';
 import { IconConfig } from '~/Icons';
 
 const styles = StyleSheet.create({

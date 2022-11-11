@@ -54,6 +54,8 @@ export default function App() {
             id: user.uid,
           });
         }
+      }else {
+        setLoading(false);
       }
     });
     return unsubscribe;
