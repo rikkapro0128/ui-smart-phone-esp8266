@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState } from 'react';
 import { Text, View, TouchableWithoutFeedback } from 'react-native';
 import { palate } from '~/theme/palate.js';
 import ToggleSwitch from 'toggle-switch-react-native';
@@ -11,7 +11,7 @@ function Switch({ payload, onChange }) {
       onChange(payload.name, !state);
       return !state;
     });
-    
+
   }
 
   return (
@@ -23,12 +23,12 @@ function Switch({ payload, onChange }) {
         flex: 1,
         borderRadius: 6,
         borderColor: palate.light.main,
-        borderWidth: 1
+        borderWidth: 1,
       }}>
         <Text style={{ textAlign: 'center' }}>{ payload.type }</Text>
         <View style={{
           alignItems: 'center',
-          marginVertical: 10
+          marginVertical: 10,
         }}>
           <ToggleSwitch
             animationSpeed={100}
@@ -36,7 +36,7 @@ function Switch({ payload, onChange }) {
             onColor={'#2cb67d'}
             offColor="#94a1b2"
             // label="Example label"
-            labelStyle={{ color: "black", fontWeight: "900" }}
+            labelStyle={{ color: 'black', fontWeight: '900' }}
             size="medium"
             onToggle={handleChange}
           />
@@ -44,7 +44,7 @@ function Switch({ payload, onChange }) {
         <Text numberOfLines={1} lineBreakMode={'middle'}>{ payload.name }</Text>
       </View>
     </TouchableWithoutFeedback>
-  )
+  );
 }
 
 export default memo(Switch);

@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { IconWifi, IconArrowRight } from '~/Icons';
 import { MD2Colors } from 'react-native-paper';
@@ -40,7 +40,7 @@ function WifiItem({ onPress, Icon = null, IconNavigate, name = 'wifi name', qual
       }}>
         {
           Icon
-          ? 
+          ?
           <Icon width={sizeIcon} height={sizeIcon} />
           :
           <IconWifi style={{

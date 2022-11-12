@@ -36,7 +36,7 @@ const menu = [
     name: 'Liên kết',
     icon: <DatabaseLighter {...iconPropCommon} />,
     btnTitle: 'liên kết WIFI cho thiết bị',
-    component: ConnectNode
+    component: ConnectNode,
   },
   // {
   //   field: 'Setting',

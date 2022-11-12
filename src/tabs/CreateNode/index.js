@@ -1,14 +1,14 @@
-import { memo, useEffect, useState } from 'react'
-import { StyleSheet, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { memo, useEffect, useState } from 'react';
+import { StyleSheet, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Text, TouchableRipple, MD2Colors, ActivityIndicator } from 'react-native-paper';
-import { palate } from '~/theme/palate.js'
-import NotFound from '~/components/NotFound/default.js'
-import { AppStorage } from '~/auth/index.js'
-import { getDatabase, ref, set, onValue } from 'firebase/database'
-import { useSelector } from 'react-redux'
-import { IconModule } from '~/Icons'
+import { palate } from '~/theme/palate.js';
+import NotFound from '~/components/NotFound/default.js';
+import { AppStorage } from '~/auth/index.js';
+import { getDatabase, ref, set, onValue } from 'firebase/database';
+import { useSelector } from 'react-redux';
+import { IconModule } from '~/Icons';
 
-const windowWidth = Dimensions.get('window').width
+const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   input: {
@@ -20,32 +20,32 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 6,
   },
-})
+});
 
-const db = getDatabase(AppStorage)
+const db = getDatabase(AppStorage);
 
 function Configs({ navigation, route }) {
   const { title, field, btnTitle } = route.params;
-  const [visible, setVisible] = useState(false)
-  const [type, setType] = useState(field)
-  const [meta, setMeta] = useState({ title: '', inputTitle: '' })
-  const [valInput, setValInput] = useState('')
-  const user = useSelector((state) => state.sign.user)
-  const [pathDevice, setPathDevice] = useState(`user-${user.uid}/devices`)
-  const [devices, setDevices] = useState([])
+  const [visible, setVisible] = useState(false);
+  const [type, setType] = useState(field);
+  const [meta, setMeta] = useState({ title: '', inputTitle: '' });
+  const [valInput, setValInput] = useState('');
+  const user = useSelector((state) => state.sign.user);
+  const [pathDevice, setPathDevice] = useState(`user-${user.uid}/devices`);
+  const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (type === 'Devices') {
-      setMeta({ title: 'Đăng ký thiết bị', inputTitle: 'Nhập tên thiết bị...' })
+      setMeta({ title: 'Đăng ký thiết bị', inputTitle: 'Nhập tên thiết bị...' });
     } else if (type === 'Areas') {
-      setMeta({ title: 'Đăng ký khu vực', inputTitle: 'Nhập tên khu vực...' })
+      setMeta({ title: 'Đăng ký khu vực', inputTitle: 'Nhập tên khu vực...' });
     }
-  }, [type])
+  }, [type]);
 
   useEffect(() => {
     setPathDevice(`user-${user.uid}/devices`);
-  }, [user])
+  }, [user]);
 
   useEffect(() => {
     onValue(ref(db, pathDevice), (snapshot) => {
@@ -58,13 +58,13 @@ function Configs({ navigation, route }) {
         setDevices(temp);
       }
       setLoading(false);
-    })
-  }, [])
+    });
+  }, []);
 
   function hanldeCreateConfig() {
     setVisible(false);
     if (type === 'Devices') {
-      const genID = Date.now()
+      const genID = Date.now();
       set(ref(db, '/' + `${pathDevice}/node-${genID}`), {
         id: genID,
         name: valInput,
@@ -96,7 +96,7 @@ function Configs({ navigation, route }) {
           {title}.
         </Text>
         {
-          loading 
+          loading
           ?
             <View style={{
               flex: 1,
@@ -104,7 +104,7 @@ function Configs({ navigation, route }) {
               alignItems: 'center',
             }}>
               <ActivityIndicator size={'large'} animating={true} color={MD2Colors.indigo600} />
-              <Text variant='headlineSmall' style={{
+              <Text variant="headlineSmall" style={{
                 marginTop: 20,
                 fontSize: 20,
               }}>Đang tải thiết bị có sẵn</Text>
@@ -116,7 +116,7 @@ function Configs({ navigation, route }) {
                   <ScrollView
                     style={{
                       flex: 1,
-                      marginVertical: 16
+                      marginVertical: 16,
                     }}
                   >
                     <View
@@ -136,7 +136,7 @@ function Configs({ navigation, route }) {
                                   backgroundColor: '#72DA6B',
                                   borderTopLeftRadius: 6,
                                   borderTopRightRadius: 6,
-                                  shadowColor: "#72da6b",
+                                  shadowColor: '#72da6b',
                                   shadowOffset: {
                                     width: 0,
                                     height: 18,
@@ -146,7 +146,7 @@ function Configs({ navigation, route }) {
                                   elevation: 24,
                                 }}
                                 borderless
-                                onPress={() => { handleNavigate(device) }}
+                                onPress={() => { handleNavigate(device); }}
                                 rippleColor="rgba(150, 150, 150, .32)"
                               >
                                 <View style={{
@@ -154,7 +154,7 @@ function Configs({ navigation, route }) {
                                   paddingVertical: 15,
                                 }}>
                                   <IconModule style={{
-                                    alignSelf: 'center'
+                                    alignSelf: 'center',
                                   }} width={84} height={84} />
                                 </View>
                               </TouchableRipple>
@@ -163,7 +163,7 @@ function Configs({ navigation, route }) {
                                   backgroundColor: 'white',
                                   borderBottomLeftRadius: 6,
                                   borderBottomRightRadius: 6,
-                                  shadowColor: "white",
+                                  shadowColor: 'white',
                                   shadowOffset: {
                                     width: 0,
                                     height: 18,
@@ -173,10 +173,10 @@ function Configs({ navigation, route }) {
                                   elevation: 24,
                                 }}
                                 borderless
-                                onPress={() => { handleNavigate(device) }}
+                                onPress={() => { handleNavigate(device); }}
                                 rippleColor="rgba(255, 255, 255, .32)"
                               >
-                                <Text variant='bodyLarge' style={{
+                                <Text variant="bodyLarge" style={{
                                   textAlign: 'center',
                                   paddingVertical: 10,
                                   color: '#3E4556',
@@ -193,8 +193,8 @@ function Configs({ navigation, route }) {
                   {btnTitle ? (
                     <TouchableOpacity
                       onPress={() => {
-                        setType(field)
-                        setVisible(true)
+                        setType(field);
+                        setVisible(true);
                       }}
                       style={{ marginBottom: 20 }}
                       activeOpacity={0.3}
@@ -269,7 +269,7 @@ function Configs({ navigation, route }) {
         </Card>
       </Modal> */}
     </>
-  )
+  );
 }
 
-export default memo(Configs)
+export default memo(Configs);

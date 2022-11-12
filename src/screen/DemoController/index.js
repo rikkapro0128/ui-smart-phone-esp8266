@@ -1,12 +1,12 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import Switch from '~/components/Widget/switch.js';
-import { getDatabase, ref, onValue, set } from "firebase/database";
-import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue, set } from 'firebase/database';
+import { initializeApp } from 'firebase/app';
 
 const AppInstance = initializeApp({
-  databaseURL: "https://dbtest-73c5f-default-rtdb.firebaseio.com",
-}, 'AppDatabase')
+  databaseURL: 'https://dbtest-73c5f-default-rtdb.firebaseio.com',
+}, 'AppDatabase');
 
 // Initialize Realtime Database and get a reference to the service
 const db = getDatabase(AppInstance);
@@ -18,27 +18,27 @@ function Demo() {
       {
         name: 'Chuồng gà',
         type: 'Công tắc',
-        state: false
+        state: false,
       },
       {
         name: 'Chuồng heo',
         type: 'Công tắc',
-        state: false
+        state: false,
       },
       {
         name: 'Vườn nho',
         type: 'Công tắc',
-        state: false
+        state: false,
       },
     ]
   );
 
   function changeSwicth(type, state) {
-    if(type === 'Chuồng gà') {
+    if (type === 'Chuồng gà') {
       set(ref(db, '(17d28c)btn1/OnOff/on'), state);
-    }else if(type === 'Chuồng heo') {
+    } else if (type === 'Chuồng heo') {
       set(ref(db, '(17d28c)btn2/OnOff/on'), state);
-    }else if(type === 'Vườn nho') {
+    } else if (type === 'Vườn nho') {
       set(ref(db, '(17d28c)btn3/OnOff/on'), state);
     }
   }
@@ -46,7 +46,7 @@ function Demo() {
   return (
     <View style={{
       padding: 20,
-      flexDirection: 'row'
+      flexDirection: 'row',
     }}>
       {
         switchs.map(payload => (
@@ -54,7 +54,7 @@ function Demo() {
         ))
       }
     </View>
-  )
+  );
 }
 
 export default memo(Demo);

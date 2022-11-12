@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { IconBack } from '~/Icons';
 import { useNavigation } from '@react-navigation/native';
@@ -7,7 +7,7 @@ function TabBar({ sizeIcon = 28, onPress = null, title = '' }) {
   const navigation = useNavigation();
 
   function defaultOnPress() {
-    if(navigation.canGoBack()) {
+    if (navigation.canGoBack()) {
       navigation.goBack();
     }
   }
@@ -36,7 +36,7 @@ function TabBar({ sizeIcon = 28, onPress = null, title = '' }) {
         fontSize: 22,
       }}>{ title }</Text>
     </View>
-  )
+  );
 }
 
 export default memo(TabBar);

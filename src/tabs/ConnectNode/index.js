@@ -1,4 +1,4 @@
-import { memo, useEffect, useState, useCallback, useRef } from 'react'
+import { memo, useEffect, useState, useCallback, useRef } from 'react';
 import {
   View,
   Dimensions,
@@ -7,39 +7,39 @@ import {
   TouchableOpacity,
   StyleSheet,
   Animated,
-} from 'react-native'
-import { Dialog, Portal, ActivityIndicator, MD2Colors, Text, Button, Divider, Avatar, IconButton, Title, Paragraph, TextInput, Card } from 'react-native-paper'
-import WifiManager from 'react-native-wifi-reborn'
-import WifiItem from '~/components/WifiItem'
+} from 'react-native';
+import { Dialog, Portal, ActivityIndicator, MD2Colors, Text, Button, Divider, Avatar, IconButton, Title, Paragraph, TextInput, Card } from 'react-native-paper';
+import WifiManager from 'react-native-wifi-reborn';
+import WifiItem from '~/components/WifiItem';
 import { IconScanWifi, IconModule, IconWifi, IconCheck, IconQuestion } from '~/Icons';
 
-const width = Dimensions.get('screen').width
-const maxSSID = 25
-const maxPoolingWIFI = 30
-const scanRefreshNode = 2 * 1000
-const scanRefreshWifi = 10 * 1000
+const width = Dimensions.get('screen').width;
+const maxSSID = 25;
+const maxPoolingWIFI = 30;
+const scanRefreshNode = 2 * 1000;
+const scanRefreshWifi = 10 * 1000;
 let idScanInterval = null;
 const dns = '192.168.4.1';
 const fullDomain = `http://${dns}`;
 
 function ConnectNode() {
-  const [loading, setLoading] = useState(true)
-  const [secure, setSecure] = useState(true)
-  const [visible, setVisible] = useState(false)
-  const [visibleWifi, setVisibleWifi] = useState(false)
+  const [loading, setLoading] = useState(true);
+  const [secure, setSecure] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [visibleWifi, setVisibleWifi] = useState(false);
   const [select, setSelect] = useState(null);
-  const [listNode, setListNode] = useState([])
-  const [listWifi, setListWifi] = useState([])
-  const [password, setPassword] = useState('')
-  const [permit, setPermit] = useState(false)
-  const [stateScanNode, setStateScanNode] = useState(false)
-  const [stateScanWifi, setStateScanWifi] = useState(false)
+  const [listNode, setListNode] = useState([]);
+  const [listWifi, setListWifi] = useState([]);
+  const [password, setPassword] = useState('');
+  const [permit, setPermit] = useState(false);
+  const [stateScanNode, setStateScanNode] = useState(false);
+  const [stateScanWifi, setStateScanWifi] = useState(false);
   const [stateCheckIsConfig, setStateCheckIsConfig] = useState(true);
   const [wifiHasConfig, setWifiHasConfig] = useState(null);
   const [loadingResetConfig, setLoadingResetConfig] = useState(false);
-  const [loadingWifi, setLoadingWifi] = useState(false)
-  const [errorPassword, setErrorPassword] = useState(null)
-  const [currentSSID, setCurrentSSID] = useState(null)
+  const [loadingWifi, setLoadingWifi] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(null);
+  const [currentSSID, setCurrentSSID] = useState(null);
   const [desc, setDesc] = useState(null);
   const viewTwo = useRef(null);
 
@@ -51,39 +51,39 @@ function ConnectNode() {
   ).current;
 
   const poolingCheckConnectWIFI = useCallback((SSID = undefined, timing = 1000) => {
-    let countPooling = 0
-    let idInterval = null
+    let countPooling = 0;
+    let idInterval = null;
     return new Promise((res, rej) => {
       idInterval = setInterval(async () => {
-        const status = await WifiManager.connectionStatus()
-        console.log('[Ping - Status]: ' + SSID + '-' + status)
+        const status = await WifiManager.connectionStatus();
+        console.log('[Ping - Status]: ' + SSID + '-' + status);
         if (typeof status === 'boolean' && status) {
-          const getSSIDCurrent = await WifiManager.getCurrentWifiSSID()
-          console.log(getSSIDCurrent)
+          const getSSIDCurrent = await WifiManager.getCurrentWifiSSID();
+          console.log(getSSIDCurrent);
           if (getSSIDCurrent === SSID) {
-            clearInterval(idInterval)
-            res(true)
+            clearInterval(idInterval);
+            res(true);
           } else {
-            clearInterval(idInterval)
-            res('Wifi connect failure')
+            clearInterval(idInterval);
+            res('Wifi connect failure');
           }
         } else if (countPooling >= maxPoolingWIFI) {
-          clearInterval(idInterval)
-          rej('Wifi connect timeout')
+          clearInterval(idInterval);
+          rej('Wifi connect timeout');
         }
-        countPooling++
-      }, timing)
-    })
-  }, [])
+        countPooling++;
+      }, timing);
+    });
+  }, []);
 
   useEffect(() => {
     async function getSSIDName() {
-      return await WifiManager.getCurrentWifiSSID()
+      return await WifiManager.getCurrentWifiSSID();
     }
     getSSIDName().then((ssid) => {
       setCurrentSSID(ssid);
-    })
-  }, [listNode])
+    });
+  }, [listNode]);
 
   useEffect(() => {
     async function getPermission() {
@@ -97,19 +97,19 @@ function ConnectNode() {
           buttonNegative: 'DENY',
           buttonPositive: 'ALLOW',
         }
-      )
+      );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         // You can now use react-native-wifi-reborn
-        setPermit(true)
-        setStateScanNode(true)
+        setPermit(true);
+        setStateScanNode(true);
       } else {
         // Permission denied
-        setPermit(false)
-        setStateScanNode(false)
+        setPermit(false);
+        setStateScanNode(false);
       }
     }
-    getPermission()
-  }, [])
+    getPermission();
+  }, []);
 
   useEffect(() => {
     const scanNode = async () => {
@@ -129,17 +129,17 @@ function ConnectNode() {
       } catch (error) {
         console.log('[Error]: ' + error.message);
       }
-    }
+    };
     const scanWifi = async () => {
       try {
         const res = await fetch(`${fullDomain}/scan-network`, { method: 'GET' });
-        const payload = await res.json()
+        const payload = await res.json();
         setListWifi(() => sortByQuality(payload.networks, 'quality', 'desc'));
       } catch (error) {
         console.log('[Error]: ' + error.message);
       }
-    }
-    if(permit) {
+    };
+    if (permit) {
       if (stateScanNode) {
         scanNode();
         idScanInterval = setInterval(scanNode, scanRefreshNode);
@@ -152,11 +152,11 @@ function ConnectNode() {
       if (idScanInterval !== null) {
         clearInterval(idScanInterval);
       }
-    }
+    };
   }, [permit, stateScanNode, stateScanWifi, stateCheckIsConfig]);
 
   function flatNetwork(networks) {
-    return networks.filter((network) => network.SSID.includes('esp-'))
+    return networks.filter((network) => network.SSID.includes('esp-'));
   }
 
   function sortByQuality(payload, field = 'SSID', sort = 'asc') {
@@ -175,7 +175,7 @@ function ConnectNode() {
       }).start(() => {
         res(true);
       });
-    })
+    });
   }
 
   function checkNodeIsConfig() {
@@ -183,28 +183,28 @@ function ConnectNode() {
       try {
         const response = await fetch(`${fullDomain}/is-config`, { method: 'GET' });
         const payload = await response.json();
-        if(payload?.message === 'WIFI HAS BEEN CONFIG') {
+        if (payload?.message === 'WIFI HAS BEEN CONFIG') {
           setWifiHasConfig(payload);
           res(payload?.message);
-        }else if(payload?.message === 'WIFI NOT YET CONFIG') {
+        } else if (payload?.message === 'WIFI NOT YET CONFIG') {
           setWifiHasConfig(null);
           rej(new Error(payload?.message));
         }
       } catch (error) {
         rej(error);
-        if(wifiHasConfig !== null) {
+        if (wifiHasConfig !== null) {
           setWifiHasConfig(null);
         }
       }
-    })
+    });
   }
 
   async function splitView(wifi) {
-    const currentSSID = await WifiManager.getCurrentWifiSSID()
+    const currentSSID = await WifiManager.getCurrentWifiSSID();
     if (currentSSID === wifi.SSID) {
       // split view config wifi for node
 
-      
+
       // loading check config wifi: (stateCheckIsConfig === true | wifiHasConfig == null)
       // loading data wifi scan: (stateCheckIsConfig === false | listWifi.length === 0)
       // load wifi scan: (stateCheckIsConfig === false | listWifi.length > 0)
@@ -221,14 +221,14 @@ function ConnectNode() {
         setStateCheckIsConfig(true);
       })
       .catch(async (err) => {
-        if(err.message === 'WIFI NOT YET CONFIG') {
+        if (err.message === 'WIFI NOT YET CONFIG') {
           // load wifi scan
           setStateCheckIsConfig(false);
           setListWifi([]);
           setStateScanWifi(true);
         }
         console.log('Node is not yet config => ' + err.message);
-      })
+      });
     } else {
       setVisible(true);
       setSelect(() => wifi);
@@ -238,44 +238,44 @@ function ConnectNode() {
   async function handleConnectToSSID() {
     try {
       if (select !== null && password) {
-        const checkWifiIsEnabled = await WifiManager.isEnabled()
+        const checkWifiIsEnabled = await WifiManager.isEnabled();
         if (!checkWifiIsEnabled) {
-          WifiManager.setEnabled(true)
+          WifiManager.setEnabled(true);
         }
-        console.log('Da bat WIFI')
+        console.log('Da bat WIFI');
         if (Object.keys(select).length > 0) {
           // WifiManager.
-          await WifiManager.connectToProtectedSSID(select.SSID, password, true)
-          await poolingCheckConnectWIFI(select.SSID)
+          await WifiManager.connectToProtectedSSID(select.SSID, password, true);
+          await poolingCheckConnectWIFI(select.SSID);
         }
-        setVisible(false)
+        setVisible(false);
       } else {
-        setErrorPassword('Mật khẩu không được phép để trống')
+        setErrorPassword('Mật khẩu không được phép để trống');
       }
     } catch (error) {
-      console.log('[Error]: ' + error.message)
-      setVisible(false)
+      console.log('[Error]: ' + error.message);
+      setVisible(false);
       if (
         error.message ===
         'Could not add or update network configuration with SSID ' + select.SSID
       ) {
-        await WifiManager.connectToSSID(select.SSID)
+        await WifiManager.connectToSSID(select.SSID);
       }
     }
     if (errorPassword !== '' && errorPassword !== null) {
-      setErrorPassword(null)
+      setErrorPassword(null);
     }
   }
 
   async function handleNodeConnectToWifi() {
     try {
-      if(select?.name && password) {
-        const res = await fetch(`${fullDomain}/config-wifi`, { 
+      if (select?.name && password) {
+        const res = await fetch(`${fullDomain}/config-wifi`, {
           method: 'POST',
           body: JSON.stringify({ ssid: select?.name, password }),
         });
         const payload = await res.json();
-        if(payload?.message === 'CONFIGURATION WIFI SUCCESSFULLY') {
+        if (payload?.message === 'CONFIGURATION WIFI SUCCESSFULLY') {
           setVisibleWifi(false);
           setDesc(`Bạn đã cấu \n hình WIFI "${select?.name}}" cho Node "${currentSSID}" thành công rồi đó!`);
           await runSideView(-12, 0);
@@ -284,21 +284,21 @@ function ConnectNode() {
           await runSideView(0, 1);
         }
       }
-      
+
     } catch (error) {
       console.log(error);
       setDesc(`Đã có lỗi gì đó xảy ra khi cấu hình WIFI "${select?.name}}" cho Node "${currentSSID}"`);
     }
-    if(visibleWifi) {
+    if (visibleWifi) {
       setVisibleWifi(false);
     }
   }
 
   async function handleConfigWifi() {
     setLoadingWifi(true);
-    if(stateScanNode) {
+    if (stateScanNode) {
       await handleConnectToSSID();
-    }else {
+    } else {
       await handleNodeConnectToWifi();
     }
     setSelect(null);
@@ -311,7 +311,7 @@ function ConnectNode() {
       setLoadingResetConfig(true);
       const res = await fetch(`${fullDomain}/reset-config`, { method: 'POST' });
       const payload = await res.json();
-      if(payload?.message === 'RESET CONFIG SUCCESSFULLY') {
+      if (payload?.message === 'RESET CONFIG SUCCESSFULLY') {
         await runSideView(-12, 0);
         setStateScanNode(true);
         await runSideView(0, 1);
@@ -324,10 +324,10 @@ function ConnectNode() {
   }
 
   function handleCloseModal() {
-    if(stateScanNode) {
+    if (stateScanNode) {
       setVisible(false);
     }
-    if(stateScanWifi) {
+    if (stateScanWifi) {
       setVisibleWifi(false);
     }
     setPassword('');
@@ -390,10 +390,10 @@ function ConnectNode() {
                 {stateScanNode ? 'Truy cập Node' : 'Cấu hình WIFI Node'}
               </Text>
               <IconButton onPress={() => {
-                if(stateScanNode) {
+                if (stateScanNode) {
                   // show decription for scan Node
                   setDesc('Đây là danh sách các node mà điện thoại quét được, để bắt đầu cấu hình chúng bạn cần phải đăng nhập vào WIFI của node này, hãy xem mật khẩu mặc định bên dưới node đó, sau đó nhập mật khẩu để đến bước tiếp theo nhé');
-                }else if(stateCheckIsConfig && wifiHasConfig !== null) {
+                } else if (stateCheckIsConfig && wifiHasConfig !== null) {
                   setDesc(`Dưới đây là thông tin cấu hình WIFI cụ thể mà Node "${currentSSID}" đã cấu hình đến, bạn hãy ghi nhớ IP bên dưới để có thể cấu hình, nếu quên hãy quay lại đây nhé!`);
                 } else {
                   // show decription for scan wifi by Node
@@ -404,9 +404,9 @@ function ConnectNode() {
                   flexDirection: 'row',
                   marginTop: 10,
                 }}>
-                  <Button buttonColor={MD2Colors.green400} style={{ ...styles.btnTab, borderTopRightRadius: 0, borderBottomRightRadius: 0 }} mode="contained">First</Button> 
-                  <Button buttonColor={MD2Colors.green400} mode="contained" style={{ borderRadius: 0, marginHorizontal: 2, ...styles.btnTab}}>First</Button> 
-                  <Button buttonColor={MD2Colors.green400} style={{ ...styles.btnTab, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} mode="contained">First</Button> 
+                  <Button buttonColor={MD2Colors.green400} style={{ ...styles.btnTab, borderTopRightRadius: 0, borderBottomRightRadius: 0 }} mode="contained">First</Button>
+                  <Button buttonColor={MD2Colors.green400} mode="contained" style={{ borderRadius: 0, marginHorizontal: 2, ...styles.btnTab}}>First</Button>
+                  <Button buttonColor={MD2Colors.green400} style={{ ...styles.btnTab, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }} mode="contained">First</Button>
                 </View> */}
             </View>
             <Text style={{ fontStyle: 'italic', marginBottom: 5 }} variant="bodyLarge"> { stateScanNode ? 'Danh sách Node mà điện thoại quét được' : stateCheckIsConfig && wifiHasConfig !== null ? 'Thông tin mà WIFI mà Node đã cấu hình đến' : 'Danh sách WIFI mà Node quét được' }</Text>
@@ -493,7 +493,7 @@ function ConnectNode() {
                                 : wifi.name
                             }
                             quality={wifi.quality}
-                            onPress={() => { 
+                            onPress={() => {
                               setSelect(wifi);
                               setVisibleWifi(true);
                             }}
@@ -570,27 +570,27 @@ function ConnectNode() {
                         <Divider horizontalInset={true} style={{ marginBottom: 10 }} />
                         <Card.Content>
                           <View style={styles.spacing}>
-                            <Text variant='titleMedium'>SSID</Text>
-                            <Text variant='titleMedium'>{ wifiHasConfig?.ssid }</Text>
+                            <Text variant="titleMedium">SSID</Text>
+                            <Text variant="titleMedium">{ wifiHasConfig?.ssid }</Text>
                           </View>
                           <View style={styles.spacing}>
-                            <Text variant='titleMedium'>Password</Text>
-                            <Text variant='titleMedium'>{ wifiHasConfig?.password }</Text>
+                            <Text variant="titleMedium">Password</Text>
+                            <Text variant="titleMedium">{ wifiHasConfig?.password }</Text>
                           </View>
                           <View style={styles.spacing}>
-                            <Text variant='titleMedium'>IP</Text>
-                            <Text variant='titleMedium'>{ wifiHasConfig?.['ip-station'] }</Text>
+                            <Text variant="titleMedium">IP</Text>
+                            <Text variant="titleMedium">{ wifiHasConfig?.['ip-station'] }</Text>
                           </View>
                           <View style={styles.spacing}>
-                            <Text variant='titleMedium'>Trạng thái kết nối</Text>
-                            <Text variant='titleMedium'>{ wifiHasConfig?.['status-station'] ? 'Đã kết nối' : 'Bị ngắt kết nối' }</Text>
+                            <Text variant="titleMedium">Trạng thái kết nối</Text>
+                            <Text variant="titleMedium">{ wifiHasConfig?.['status-station'] ? 'Đã kết nối' : 'Bị ngắt kết nối' }</Text>
                           </View>
                           {
                             wifiHasConfig?.['status-station']
                             ?
                             <View style={{ ...styles.spacing, marginBottom: 0 }}>
-                              <Text variant='titleMedium'>Chất lượng kết nối</Text>
-                              <Text variant='titleMedium'>{  Math.min(Math.max(2 * (wifiHasConfig?.['quality-station'] + 100), 0), 100) }%</Text>
+                              <Text variant="titleMedium">Chất lượng kết nối</Text>
+                              <Text variant="titleMedium">{  Math.min(Math.max(2 * (wifiHasConfig?.['quality-station'] + 100), 0), 100) }%</Text>
                             </View>
                             :
                             null
@@ -611,7 +611,7 @@ function ConnectNode() {
           <Dialog.Title>{ stateScanNode ? 'Kết nối tới node' : 'Cấu hình node tới WIFI' }</Dialog.Title>
           <Dialog.Content>
             <Paragraph style={{ marginBottom: 10 }}>Bạn đang kết nối tới WIFI "{ select?.name || select?.SSID }"</Paragraph>
-            <TextInput label={'Password'} secureTextEntry={secure} mode={'outlined'} right={<TextInput.Icon onPress={() => setSecure(state => !state)} icon="eye" />} value={password} onChangeText={(val) => setPassword(val)} placeholder='--- mật khẩu sẽ bị ẩn ---' />
+            <TextInput label={'Password'} secureTextEntry={secure} mode={'outlined'} right={<TextInput.Icon onPress={() => setSecure(state => !state)} icon="eye" />} value={password} onChangeText={(val) => setPassword(val)} placeholder="--- mật khẩu sẽ bị ẩn ---" />
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={handleCloseModal}>Huỷ</Button>
@@ -632,7 +632,7 @@ function ConnectNode() {
         </Dialog>
       </Portal>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -652,8 +652,8 @@ const styles = StyleSheet.create({
   spacing: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 4
-  }
-})
+    marginBottom: 4,
+  },
+});
 
-export default memo(ConnectNode)
+export default memo(ConnectNode);

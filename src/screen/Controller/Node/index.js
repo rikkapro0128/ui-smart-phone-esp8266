@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1,
     marginHorizontal: 5,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   info: {
     fontSize: 18,
@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
   spacing: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 4
-  }
-})
+    marginBottom: 4,
+  },
+});
 
 function Node({ route, navigation }) {
   const { path, id, name, ip, doneConfig } = route.params;
@@ -46,17 +46,17 @@ function Node({ route, navigation }) {
     const getIndex = parseInt(String(type).split('_')[1]);
     // console.log(getIndex, val, val.length);
     setValIP({ ...valIP, type: val });
-    if(val.length >= 3) {
-      if(getIndex === 1) {
+    if (val.length >= 3) {
+      if (getIndex === 1) {
         ref_ip_2.current.focus();
         setPresentFocus(() => 'ip_2');
-      }else if(getIndex === 2) {
+      } else if (getIndex === 2) {
         ref_ip_3.current.focus();
         setPresentFocus(() => 'ip_3');
-      }else if(getIndex === 3) {
+      } else if (getIndex === 3) {
         ref_ip_4.current.focus();
         setPresentFocus(() => 'ip_4');
-      }else {
+      } else {
         ref_ip_4.current.blur();
       }
     }
@@ -68,16 +68,16 @@ function Node({ route, navigation }) {
   }
 
   function handleSubmitInput(type) {
-    if(type === 'domain_1') {
+    if (type === 'domain_1') {
       ref_ip_2.current.focus();
       setPresentFocus(() => 'ip_2');
-    }else if(type === 'domain_2') {
+    } else if (type === 'domain_2') {
       ref_ip_3.current.focus();
       setPresentFocus(() => 'ip_3');
-    }else if(type === 'domain_3') {
+    } else if (type === 'domain_3') {
       ref_ip_4.current.focus();
       setPresentFocus(() => 'ip_4');
-    }else {
+    } else {
       ref_ip_4.current.blur();
     }
   }
@@ -88,7 +88,7 @@ function Node({ route, navigation }) {
         width: '100%',
       }}>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => { navigation.goBack() }} />
+        <Appbar.BackAction onPress={() => { navigation.goBack(); }} />
         <Appbar.Content title="Cấu hình node" />
         <Appbar.Action icon="dots-vertical" onPress={() => {}} />
       </Appbar.Header>
@@ -132,18 +132,18 @@ function Node({ route, navigation }) {
             }}>
               <Card>
                 <Card.Content style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                  <Text variant='titleLarge'>Thông tin</Text>
+                  <Text variant="titleLarge">Thông tin</Text>
                   <Avatar.Icon size={42} icon="router-wireless" />
                 </Card.Content>
                 <Divider horizontalInset={true} style={{ marginBottom: 10 }} />
                 <Card.Content>
                   <View style={styles.spacing}>
-                    <Text variant='titleMedium'>ID</Text>
-                    <Text variant='titleMedium'>{ id }</Text>
+                    <Text variant="titleMedium">ID</Text>
+                    <Text variant="titleMedium">{ id }</Text>
                   </View>
                   <View style={styles.spacing}>
-                    <Text variant='titleMedium'>Tên</Text>
-                    <Text variant='titleMedium'>{ name }</Text>
+                    <Text variant="titleMedium">Tên</Text>
+                    <Text variant="titleMedium">{ name }</Text>
                   </View>
                 </Card.Content>
               </Card>
@@ -179,28 +179,28 @@ function Node({ route, navigation }) {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-              <Text variant='labelMedium'>Bạn đã cấu hình WIFI cho node đó chưa?</Text>
-              <Button icon="wifi-arrow-up-down" labelStyle={{ fontSize: 14 }} mode="contained" onPress={() => { navigation.navigate('Connects') }}>
+              <Text variant="labelMedium">Bạn đã cấu hình WIFI cho node đó chưa?</Text>
+              <Button icon="wifi-arrow-up-down" labelStyle={{ fontSize: 14 }} mode="contained" onPress={() => { navigation.navigate('Connects'); }}>
                 Cấu hình
               </Button>
             </View>
             <View style={{
-              width: '100%'
+              width: '100%',
             }}>
               <Text style={{
                 textAlign: 'left',
                 marginVertical: 10,
                 fontSize: 18,
-                fontWeight: 'bold'
+                fontWeight: 'bold',
               }}>Địa chỉ IP của thiết bị</Text>
               <View style={{
                 flexDirection: 'row',
                 marginHorizontal: -5,
               }}>
-                <TextInput 
+                <TextInput
                   style={styles.inputIp}
-                  keyboardType='numeric'
-                  placeholder='xxx'
+                  keyboardType="numeric"
+                  placeholder="xxx"
                   autoFocus={true}
                   value={valIP.domain_1}
                   onFocus={() => handleFocus('domain_1')}
@@ -208,10 +208,10 @@ function Node({ route, navigation }) {
                   blurOnSubmit={false}
                   onChangeText={(val) => handleIPAddress('domain_1', val)}
                 />
-                <TextInput 
+                <TextInput
                   style={styles.inputIp}
-                  keyboardType='numeric'
-                  placeholder='xxx'
+                  keyboardType="numeric"
+                  placeholder="xxx"
                   value={valIP.domain_2}
                   ref={ref_ip_2}
                   onFocus={() => handleFocus('domain_2')}
@@ -219,10 +219,10 @@ function Node({ route, navigation }) {
                   blurOnSubmit={false}
                   onChangeText={(val) => handleIPAddress('domain_2', val)}
                   />
-                <TextInput 
+                <TextInput
                   style={styles.inputIp}
-                  keyboardType='numeric'
-                  placeholder='xxx'
+                  keyboardType="numeric"
+                  placeholder="xxx"
                   value={valIP.domain_3}
                   ref={ref_ip_3}
                   onFocus={() => handleFocus('domain_3')}
@@ -230,10 +230,10 @@ function Node({ route, navigation }) {
                   blurOnSubmit={false}
                   onChangeText={(val) => handleIPAddress('domain_3', val)}
                   />
-                <TextInput 
+                <TextInput
                   style={styles.inputIp}
-                  keyboardType='numeric'
-                  placeholder='xxx'
+                  keyboardType="numeric"
+                  placeholder="xxx"
                   value={valIP.domain_4}
                   ref={ref_ip_4}
                   onFocus={() => handleFocus('domain_4')}
@@ -253,7 +253,7 @@ function Node({ route, navigation }) {
       </View>
 
     </>
-  )
+  );
 }
 
-export default memo(Node)
+export default memo(Node);

@@ -7,7 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUser } from '~/store/signSlice';
 import { useState, useEffect } from 'react';
-import { getDatabase, ref, child, get, set, onValue } from "firebase/database";
+import { getDatabase, ref, child, get, set, onValue } from 'firebase/database';
 import LoadingPage from '~/components/LoadingPage';
 // import { v1 as uuidv1 } from 'uuid';
 
@@ -47,14 +47,14 @@ export default function App() {
         setLoading(false);
         let uid = `user-${user.uid}`;
         const snapshot = await get(child(ref(db), uid));
-        if(snapshot.exists()) {
+        if (snapshot.exists()) {
           console.log(snapshot.val());
-        }else {
+        } else {
           set(ref(db, `${uid}/`), {
             id: user.uid,
           });
         }
-      }else {
+      } else {
         setLoading(false);
       }
     });
