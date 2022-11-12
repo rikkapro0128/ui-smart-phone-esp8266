@@ -3,7 +3,7 @@ import { StatusBar, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Panel from '~/screen/Controller/Panel';
 import Profile from '~/screen/Controller/Profile';
-import Device from '~/screen/Controller/Device';
+import Node from '~/screen/Controller/Node';
 import { palate } from '~/theme/palate.js';
 
 const Stack = createNativeStackNavigator();
@@ -18,8 +18,8 @@ const tabs = [
     component: Profile,
   },
   {
-    name: 'Device',
-    component: Device,
+    name: 'Node',
+    component: Node,
   },
 ];
 

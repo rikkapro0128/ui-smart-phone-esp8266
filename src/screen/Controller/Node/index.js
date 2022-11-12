@@ -1,8 +1,7 @@
 import { memo, useEffect, useState, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
-import Divider from '~/components/Divider';
-import TopBar from '~/components/TopBar';
-import { IconConfig } from '~/Icons';
+import { View, TextInput, StyleSheet } from 'react-native';
+import { Appbar, Card, Avatar, Divider, Text, MD2Colors, Button } from 'react-native-paper';
+// import { IconConfig } from '~/Icons';
 
 const styles = StyleSheet.create({
   inputIp: {
@@ -17,10 +16,15 @@ const styles = StyleSheet.create({
   },
   info: {
     fontSize: 18,
+  },
+  spacing: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 4
   }
 })
 
-function Device({ route }) {
+function Node({ route, navigation }) {
   const { path, id, name, ip, doneConfig } = route.params;
   const [valIP, setValIP] = useState({
     domain_1: undefined,
@@ -83,11 +87,15 @@ function Device({ route }) {
       <View style={{
         width: '100%',
       }}>
-      <TopBar title={'Cấu hình thiết bị'} />
-      <Divider
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => { navigation.goBack() }} />
+        <Appbar.Content title="Cấu hình node" />
+        <Appbar.Action icon="dots-vertical" onPress={() => {}} />
+      </Appbar.Header>
+      {/* <Divider
         thickness={2}
         marginVertical={0}
-      />
+      /> */}
       </View>
       <View style={{
         margin: 20,
@@ -119,34 +127,63 @@ function Device({ route }) {
               <IconConfig />
             </View> */}
             <View style={{
-              backgroundColor: 'white',
-              borderRadius: 6,
               width: '100%',
-              padding: 20,
-              marginBottom: 20
+              marginBottom: 20,
             }}>
-              <Text style={styles.info}>ID - { id }</Text>
-              <Text style={styles.info}>Tên - { name }</Text>
+              <Card>
+                <Card.Content style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                  <Text variant='titleLarge'>Thông tin</Text>
+                  <Avatar.Icon size={42} icon="router-wireless" />
+                </Card.Content>
+                <Divider horizontalInset={true} style={{ marginBottom: 10 }} />
+                <Card.Content>
+                  <View style={styles.spacing}>
+                    <Text variant='titleMedium'>ID</Text>
+                    <Text variant='titleMedium'>{ id }</Text>
+                  </View>
+                  <View style={styles.spacing}>
+                    <Text variant='titleMedium'>Tên</Text>
+                    <Text variant='titleMedium'>{ name }</Text>
+                  </View>
+                </Card.Content>
+              </Card>
             </View>
-            <Text style={{
-              backgroundColor: '#FEF3C7',
-              padding: 20,
-              fontSize: 18,
-              fontStyle: 'italic',
+            <Card style={{
               width: '100%',
-              borderRadius: 6,
-            }}>"Mời bạn kết nối thiết bị để hoàn tất quá trình cấu hình thiết bị. Lưu ý rằng&#160;
-              <Text style={{
-                fontWeight: 'bold',
-                textDecorationLine: 'underline',
-              }}>ứng dụng</Text>
-              &#160;và&#160;
-              <Text style={{
-                fontWeight: 'bold',
-                textDecorationLine: 'underline',
-              }}>thiết bị</Text>
-              &#160;của bạn phải cùng một mạng WIFI."
-            </Text>
+              backgroundColor: MD2Colors.indigo50,
+            }}>
+              <Card.Content>
+                <Text style={{
+                fontSize: 18,
+                fontStyle: 'italic',
+                width: '100%',
+                borderRadius: 6,
+              }}>"Đây là cấu hình liên kết ứng dụng với node mà bạn đã kết nối WIFI, hãy liên kết để hoàn tất quá trình cấu hình thiết bị. Lưu ý rằng&#160;
+                <Text style={{
+                  fontWeight: 'bold',
+                  textDecorationLine: 'underline',
+                }}>ứng dụng</Text>
+                &#160;và&#160;
+                <Text style={{
+                  fontWeight: 'bold',
+                  textDecorationLine: 'underline',
+                }}>thiết bị</Text>
+                &#160;của bạn phải cùng một mạng WIFI."
+              </Text>
+              </Card.Content>
+            </Card>
+            <View style={{
+              width: '100%',
+              marginTop: 18,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+              <Text variant='labelMedium'>Bạn đã cấu hình WIFI cho node đó chưa?</Text>
+              <Button icon="wifi-arrow-up-down" labelStyle={{ fontSize: 14 }} mode="contained" onPress={() => { navigation.navigate('Connects') }}>
+                Cấu hình
+              </Button>
+            </View>
             <View style={{
               width: '100%'
             }}>
@@ -205,11 +242,11 @@ function Device({ route }) {
                   onChangeText={(val) => handleIPAddress('domain_4', val)}
                 />
               </View>
-              <Button size='giant' style={{
+              {/* <Button style={{
                 marginTop: 15,
-              }} appearance='outline'>
+              }}>
                 TIẾN HÀNH KẾT NỐI
-              </Button>
+              </Button> */}
             </View>
           </View>
         }
@@ -219,4 +256,4 @@ function Device({ route }) {
   )
 }
 
-export default memo(Device)
+export default memo(Node)

@@ -5,7 +5,7 @@ import NotFound from '~/components/NotFound/default.js';
 import TabBar from '~/components/TabBar';
 import { Drone, PointMap, SettingLighter, DatabaseLighter, Chart } from '~/Icons';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { CreateNode, ConnectDevice } from '~/tabs';
+import { CreateNode, ConnectNode } from '~/tabs';
 import { useSelector } from 'react-redux';
 import { UserLine } from '~/Icons';
 
@@ -20,9 +20,9 @@ const iconPropCommon = {
 const menu = [
   {
     field: 'Nodes',
-    name: 'Thiết bị',
+    name: 'Nodes',
     icon: <Drone {...iconPropCommon} />,
-    btnTitle: 'Đăng ký thiết bị mới',
+    btnTitle: 'Đăng ký Node mới',
     component: CreateNode,
   },
   {
@@ -36,7 +36,7 @@ const menu = [
     name: 'Liên kết',
     icon: <DatabaseLighter {...iconPropCommon} />,
     btnTitle: 'liên kết WIFI cho thiết bị',
-    component: ConnectDevice
+    component: ConnectNode
   },
   // {
   //   field: 'Setting',
@@ -136,7 +136,7 @@ function Panel({ navigation }) {
         </View>
       </View>
       {/* Tabar switch Panel */}
-      <Tab.Navigator tabBar={() => null} initialRouteName="Connects">
+      <Tab.Navigator tabBar={() => null} initialRouteName="Nodes">
         {menu.map((tab) => (
           <Tab.Screen key={tab.field} name={tab.field} initialParams={{ title: tab.name, field: tab.field, btnTitle: tab?.btnTitle || null }} component={tab?.component || NotFound} />
         ))}

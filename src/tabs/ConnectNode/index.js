@@ -22,7 +22,7 @@ let idScanInterval = null;
 const dns = '192.168.4.1';
 const fullDomain = `http://${dns}`;
 
-function ConnectDevice() {
+function ConnectNode() {
   const [loading, setLoading] = useState(true)
   const [secure, setSecure] = useState(true)
   const [visible, setVisible] = useState(false)
@@ -118,7 +118,7 @@ function ConnectDevice() {
         if (!checkWifiIsEnabled) {
           WifiManager.setEnabled(true);
         } else {
-          let lsWIFI = await WifiManager.reScanAndLoadWifiList();
+          let lsWIFI = lsWIFI = await WifiManager.reScanAndLoadWifiList();
           lsWIFI = flatNetwork(lsWIFI);
           setListNode(() => sortByQuality(lsWIFI));
           setListNode(() => lsWIFI);
@@ -278,6 +278,10 @@ function ConnectDevice() {
         if(payload?.message === 'CONFIGURATION WIFI SUCCESSFULLY') {
           setVisibleWifi(false);
           setDesc(`Bạn đã cấu \n hình WIFI "${select?.name}}" cho Node "${currentSSID}" thành công rồi đó!`);
+          await runSideView(-12, 0);
+          setStateScanNode(true); // turn on scan node
+          setStateScanWifi(false); // turn off scan wifi node
+          await runSideView(0, 1);
         }
       }
       
@@ -388,7 +392,7 @@ function ConnectDevice() {
               <IconButton onPress={() => {
                 if(stateScanNode) {
                   // show decription for scan Node
-                  setDesc('Đây là danh sách các node mà điện thoại quét được, để bắt đầu cấu hình chúng bạn cần phải đăng nhậP vào WIFI của node này, hãy xem mật khẩu mặc định bên dưới node đó, sau đó nhập mật khẩu để đến bước tiếp theo nhé');
+                  setDesc('Đây là danh sách các node mà điện thoại quét được, để bắt đầu cấu hình chúng bạn cần phải đăng nhập vào WIFI của node này, hãy xem mật khẩu mặc định bên dưới node đó, sau đó nhập mật khẩu để đến bước tiếp theo nhé');
                 }else if(stateCheckIsConfig && wifiHasConfig !== null) {
                   setDesc(`Dưới đây là thông tin cấu hình WIFI cụ thể mà Node "${currentSSID}" đã cấu hình đến, bạn hãy ghi nhớ IP bên dưới để có thể cấu hình, nếu quên hãy quay lại đây nhé!`);
                 } else {
@@ -652,4 +656,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default memo(ConnectDevice)
+export default memo(ConnectNode)

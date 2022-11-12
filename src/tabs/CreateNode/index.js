@@ -1,11 +1,10 @@
 import { memo, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { StyleSheet, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { Text, TouchableRipple, MD2Colors, ActivityIndicator } from 'react-native-paper';
 import { palate } from '~/theme/palate.js'
 import NotFound from '~/components/NotFound/default.js'
 import { AppStorage } from '~/auth/index.js'
 import { getDatabase, ref, set, onValue } from 'firebase/database'
-import { v1 as uuidv1 } from 'uuid'
-import Device from '~/components/Device'
 import { useSelector } from 'react-redux'
 import { IconModule } from '~/Icons'
 
@@ -74,6 +73,10 @@ function Configs({ navigation, route }) {
     }
   }
 
+  function handleNavigate(device) {
+    navigation.navigate('Node', { path: pathDevice, ...device });
+  }
+
   return (
     <>
       <View
@@ -100,11 +103,11 @@ function Configs({ navigation, route }) {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-              {/* <Spinner size='giant'/> */}
-              <Text style={{
+              <ActivityIndicator size={'large'} animating={true} color={MD2Colors.indigo600} />
+              <Text variant='headlineSmall' style={{
                 marginTop: 20,
                 fontSize: 20,
-              }}>Đang tải thiết bị có sẵn...</Text>
+              }}>Đang tải thiết bị có sẵn</Text>
             </View>
           :
             <>
@@ -127,18 +130,59 @@ function Configs({ navigation, route }) {
                           width: (windowWidth - 60) / 2,
                           margin: 5,
                         }}
-                          onPress={() => {
-                            navigation.navigate('Device', { path: pathDevice, ...device });
-                          }}
-                        >
-                          <IconModule style={{
-                            alignSelf: 'center'
-                          }} width={64} height={64} />
-                          <Text style={{
-                            textAlign: 'left',
-                            marginTop: 6,
-                          }}>{device.name.length > 20 ? device.name.slice(0, 20) + '...' : device.name }</Text>
-                        </View>
+                          >
+                              <TouchableRipple
+                                style={{
+                                  backgroundColor: '#72DA6B',
+                                  borderTopLeftRadius: 6,
+                                  borderTopRightRadius: 6,
+                                  shadowColor: "#72da6b",
+                                  shadowOffset: {
+                                    width: 0,
+                                    height: 18,
+                                  },
+                                  shadowOpacity:  0.25,
+                                  shadowRadius: 20.00,
+                                  elevation: 24,
+                                }}
+                                borderless
+                                onPress={() => { handleNavigate(device) }}
+                                rippleColor="rgba(150, 150, 150, .32)"
+                              >
+                                <View style={{
+                                  // backgroundColor: 'white',
+                                  paddingVertical: 15,
+                                }}>
+                                  <IconModule style={{
+                                    alignSelf: 'center'
+                                  }} width={84} height={84} />
+                                </View>
+                              </TouchableRipple>
+                              <TouchableRipple
+                                style={{
+                                  backgroundColor: 'white',
+                                  borderBottomLeftRadius: 6,
+                                  borderBottomRightRadius: 6,
+                                  shadowColor: "white",
+                                  shadowOffset: {
+                                    width: 0,
+                                    height: 18,
+                                  },
+                                  shadowOpacity:  0.25,
+                                  shadowRadius: 20.00,
+                                  elevation: 24,
+                                }}
+                                borderless
+                                onPress={() => { handleNavigate(device) }}
+                                rippleColor="rgba(255, 255, 255, .32)"
+                              >
+                                <Text variant='bodyLarge' style={{
+                                  textAlign: 'center',
+                                  paddingVertical: 10,
+                                  color: '#3E4556',
+                                }}>{device.name.length > 20 ? device.name.slice(0, 20) + '...' : device.name }</Text>
+                              </TouchableRipple>
+                          </View>
                       ))}
                     </View>
                   </ScrollView>
